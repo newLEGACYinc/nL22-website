@@ -1,0 +1,88 @@
+.Homepage {
+  text-align: center;
+  background: linear-gradient(-45deg, #c4002c, #693ba8, #0051c8, #01824c);
+  background-size: 400% 400%;
+  animation: gradient 30s ease infinite;
+  height: 100vh;
+}
+
+.Homepage-logo {
+  margin-top: -7.5rem;
+  height: 40vmin;
+}
+
+.welcome {
+  margin-top: -15rem;
+}
+
+.Homepage-cont {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-size: calc(10px + 2vmin);
+  color: white;
+}
+
+.Homepage-link {
+  z-index: 0;
+  color: #61dafb;
+}
+
+@keyframes animate {
+  0% {
+    opacity: 0;
+    transform: scale(0) translateY(-200%) rotate(0deg);
+  }
+
+  10% {
+    opacity: 1;
+  }
+
+  90% {
+    opacity: 1;
+  }
+
+  100% {
+    opacity: 0;
+    transform: scale(1) translateY(-500%) rotate(360deg);
+  }
+}
+
+@keyframes Homepage-logo-wobble {
+  0% {
+    transform: rotate(0deg);
+  }
+
+  25% {
+    transform: rotate(-5deg);
+  }
+
+  50% {
+    transform: rotate(0deg);
+
+  }
+
+  75% {
+    transform: rotate(5deg);
+  }
+
+  100% {
+    transform: rotate(0deg);
+  }
+}
+
+@keyframes gradient {
+  0% {
+    background-position: 0% 50%;
+  }
+
+  50% {
+    background-position: 100% 100%;
+  }
+
+  100% {
+    background-position: 0% 50%;
+  }
+}
