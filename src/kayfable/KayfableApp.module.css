@@ -123,3 +123,25 @@ tfoot th:first-child {
     z-index: 5;
     width: 30%;
 }
+
+.kayfable-modal {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    right: auto;
+    bottom: auto;
+    background-color: red;
+    border-width: 5px;
+    border-color: #0C4A6E;
+    max-height: 80%;
+    max-width: 90%;
+    transform: translate(-50%, -50%);
+}
+
+.kayfable-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+}
