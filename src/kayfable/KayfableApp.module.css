@@ -130,12 +130,14 @@ tfoot th:first-child {
     left: 50%;
     right: auto;
     bottom: auto;
-    background-color: red;
-    border-width: 5px;
-    border-color: #0C4A6E;
+    background-color: #fff;
+    border: 5px solid #0C4A6E;
     max-height: 80%;
     max-width: 90%;
     transform: translate(-50%, -50%);
+    padding-left: 2rem;
+    padding-right: 2rem;
+    padding-bottom: 2rem;
 }
 
 .kayfable-overlay {
@@ -144,4 +146,5 @@ tfoot th:first-child {
     left: 0;
     right: 0;
     bottom: 0;
+    background-color: rgba(0, 0, 0, 0.37);
 }

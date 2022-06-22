@@ -1,10 +1,12 @@
 import styles from './KayfableApp.module.css';
 import Game from './Game';
+import Share from './Share';
 import Modal from 'react-modal';
 import axios from "axios";
 import React, { useState, useEffect } from "react";
 
 function KayfableApp() {
+    const [isAppReady, setIsAppReady] = useState(false);
     const [wrestlerList, setWrestlerList] = useState([]);
     const [nameList, setNameList] = useState([]);
 
@@ -38,8 +40,9 @@ function KayfableApp() {
     const [answer, setAnswer] = useState(() => {
         const savedResult = localStorage.getItem("gameState");
         if (savedResult !== null) {
-            const gameState = JSON.parse(savedResult);
-            return gameState.answer;
+            axios.get('/kayfable/answer').then((res) => {
+                return res.data
+            })
         }
         return "";
     })
@@ -77,7 +80,8 @@ function KayfableApp() {
         getNameList();
         getLocalStats();
         getAnswer();
-    }, [])
+        setIsAppReady(true);
+    }, [isAppReady])
 
     function getLocalStats() {
         const savedResult = localStorage.getItem("localStats");
@@ -198,26 +202,49 @@ function KayfableApp() {
 
     return (
         <div>
-            <Game
-                wrestlerList={wrestlerList}
-                nameList={nameList}
-                localStats={localStats}
-                answer={answer}
-                guesses={guesses}
-                evaluations={evaluations}
-                gameStatus={gameStatus}
-                guessCallback={guessCallback}
-                evaluationsCallback={evaluationsCallback}
-                stateCallback={stateCallback}
-                localStatsCallback={localStatsCallback}
-            />
-            <Modal
-                isOpen={showModal}
-                contentLabel="Game Over Modal"
-                className={styles["kayfable-modal"]}
-                overlayClassName={styles["kayfable-overlay"]}>
-                <h2 style={{ padding: "2em" }}>Good Job!</h2>
-            </Modal>
+            {isAppReady &&
+                <div>
+                    <header>{guesses.length < 1 &&
+                        <div>
+                            <input
+                                type="checkbox"
+                                checked={hardMode}
+                                onChange={toggleDifficulty}
+                                value="Hard Mode" />
+                            <span>Hard Mode</span>
+                        </div>}
+                    </header>
+                    <Game
+                        wrestlerList={wrestlerList}
+                        nameList={nameList}
+                        localStats={localStats}
+                        answer={answer}
+                        guesses={guesses}
+                        evaluations={evaluations}
+                        gameStatus={gameStatus}
+                        hardMode={hardMode}
+                        guessCallback={guessCallback}
+                        evaluationsCallback={evaluationsCallback}
+                        stateCallback={stateCallback}
+                        localStatsCallback={localStatsCallback}
+                        toggleModal={toggleModal}
+                    />
+                    <Modal
+                        isOpen={showModal}
+                        contentLabel="Game Over Modal"
+                        className={styles["kayfable-modal"]}
+                        overlayClassName={styles["kayfable-overlay"]}
+                        appElement={document.getElementById('root')}>
+                        <div style={{ textAlign: 'center' }}>
+                            <h2 style={{ fontSize: '1.5rem', lineHeight: '2rem', paddingTop: '0.5rem', paddingBottom: '0.5rem', fontWeight: '700' }}>
+                                {gameStatus === 'WIN' ? "Good Job!" : "Better Luck Next Time"}
+                            </h2>
+                            <span>Today's Wrestler Was</span><br />
+                            <span style={{ fontWeight: '700' }}>{answer.name}</span><br />
+                            <Share result={gameStatus} evaluations={evaluations} answer={answer} hardMode={hardMode} /><br />
+                            <a href={`https://www.cagematch.net/?id=2&nr=${answer.id}`} target="_blank" >View Cagematch Profile</a>
+                        </div>
+                    </Modal></div>}
         </div>
     );
 }
