@@ -4,7 +4,12 @@
 /node_modules
 /.pnp
 .pnp.js
-/api
+/api/Scripts
+/api/Lib
+/api/Include
+/api/__pycache__
+/api/pyvenv.cfg
+
 
 # testing
 /coverage
