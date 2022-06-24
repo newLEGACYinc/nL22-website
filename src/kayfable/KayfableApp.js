@@ -40,9 +40,17 @@ function KayfableApp() {
     const [answer, setAnswer] = useState(() => {
         const savedResult = localStorage.getItem("gameState");
         if (savedResult !== null) {
-            axios.get('/kayfable/answer').then((res) => {
-                return res.data
-            })
+            return {
+                "game_id": savedResult.game_id,
+                "id": "",
+                "name": "",
+                "gender": "",
+                "age": "",
+                "birth_place": "",
+                "debut_year": "",
+                "height": "",
+                "weight": "",
+            }
         }
         return "";
     })
@@ -81,7 +89,7 @@ function KayfableApp() {
         getLocalStats();
         getAnswer();
         setIsAppReady(true);
-    }, [isAppReady])
+    }, [])
 
     function getLocalStats() {
         const savedResult = localStorage.getItem("localStats");
@@ -107,13 +115,13 @@ function KayfableApp() {
         axios.get('/kayfable/check/database').then((res) => {
             setWrestlerList(res.data);
         })
-    };
+    }
 
     async function getNameList() {
         axios.get('/kayfable/check/gimmick').then((res) => {
             setNameList(res.data);
         })
-    };
+    }
 
     function getAnswer() {
         const savedResult = localStorage.getItem("gameState");
@@ -204,7 +212,7 @@ function KayfableApp() {
         <div>
             {isAppReady &&
                 <div>
-                    <header>{guesses.length < 1 &&
+                    <header className={styles["kayfable-header"]}>{guesses.length < 1 &&
                         <div>
                             <input
                                 type="checkbox"
@@ -246,7 +254,7 @@ function KayfableApp() {
                         </div>
                     </Modal></div>}
         </div>
-    );
+    )
 }
 
 export default KayfableApp;

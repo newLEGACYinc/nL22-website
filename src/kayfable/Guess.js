@@ -71,7 +71,7 @@ function Guess(props) {
             }
         </tr >
 
-    );
+    )
 }
 
 

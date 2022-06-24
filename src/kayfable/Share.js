@@ -45,7 +45,7 @@ function Share(props) {
             "Kayfable " + getDate(props.answer.game_id) +
             " - " +
             `${props.result === "LOSE" ? 'X' : props.evaluations.length}` +
-            "/10" + `${props.hardMode && "*"}\n\n` +
+            "/10" + `${props.hardMode ? "*" : ""}\n\n` +
             generateGrid(props.evaluations)
         )
     }

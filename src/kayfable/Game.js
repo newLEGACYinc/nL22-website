@@ -33,7 +33,7 @@ function Game(props) {
             return suggestions.find(v => v.id === id)
         });
         return suggestionList.splice(0, 9)
-    }
+    };
 
     function compare(a, b) {
         const gimmickA = a.gimmick.toUpperCase();
@@ -55,7 +55,7 @@ function Game(props) {
             comparison = -1;
         }
         return comparison;
-    }
+    };
 
     async function match(id) {
         if (id) {
@@ -89,7 +89,7 @@ function Game(props) {
         } else {
             console.log("Nothing to match against");
         };
-    }
+    };
 
     function validateGuess(data) {
         let result = props.answer
@@ -234,11 +234,24 @@ function Game(props) {
             }
         }
         return response;
-    }
+    };
 
     function handleSelect(id) {
         setSearchTerm('');
         match(id);
+    };
+
+    function handleInput(e) {
+        e.preventDefault();
+        if (searchTerm.length > 0) {
+            try {
+                let suggestionList = matchFunction(searchTerm);
+                setSearchTerm('');
+                match(suggestionList[0].id);
+            } catch (error) {
+                console.log("No Wrestler Found")
+            }
+        }
     };
 
     return (
@@ -249,7 +262,7 @@ function Game(props) {
             {props.gameStatus !== "IN PROGRESS" ?
                 <button onClick={() => props.toggleModal()}>See Results</button> :
                 <div className={styles["kayfable-guess-area"]}>
-                    <form>
+                    <form onSubmit={handleInput}>
                         <input
                             className={styles["kayfable-dropdown-input"]}
                             type="text"
@@ -294,7 +307,7 @@ function Game(props) {
                                     key={`guess ${index}`}
                                     guess={guess}
                                     evaluations={props.evaluations[index]}
-                                    hardMode = {props.hardMode}
+                                    hardMode={props.hardMode}
                                 />
                             ))}
                     </tbody>
