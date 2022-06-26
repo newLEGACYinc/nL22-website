@@ -1,5 +1,22 @@
+
+
 .Kayfable {
     text-align: center;
+    background-color: #282c34;
+    background-size: cover;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    font-size: calc(10px + 2vmin);
+    color: white;
+}
+
+*,
+*:before,
+*:after {
+  box-sizing: inherit;
 }
 
 .kayfable-form {
@@ -97,34 +114,50 @@
     position: relative;
 }
 
-.kayfable-table th,
-.kayfable-table td {
+.kayfable-table {
+    position: relative;
+    width: 80%;
+    z-index: 0;
+    margin: auto;
+    overflow: auto;
+  }
+  .kayfable-table table {
+    width: 80%;
+    margin: auto;
+    border-collapse: separate;
+    border-spacing: 0;
+  }
+  .table-wrap {
+    position: relative;
+  }
+  .kayfable-table th,
+  .kayfable-table td {
     padding: 15px 10px;
     border: 1px solid #000;
     background: #fff;
-    vertical-align: top;
-}
-
-.kayfable-table thead th {
+    vertical-align: middle;
+  }
+  .kayfable-table thead th {
     background: #333;
     color: #fff;
+    position: -webkit-sticky;
     position: sticky;
     top: 0;
-}
-
-th:first-child {
+  }
+  
+  th:first-child {
+    position: -webkit-sticky;
     position: sticky;
     left: 0;
     z-index: 2;
-}
-
-thead th:first-child,
-tfoot th:first-child {
+    width: 20%
+  }
+  thead th:first-child,
+  tfoot th:first-child {
     z-index: 5;
-    width: 30%;
-}
+  }
 
-.kayfable-modal {
+  .kayfable-modal {
     position: absolute;
     top: 50%;
     left: 50%;

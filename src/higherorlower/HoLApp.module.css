@@ -52,6 +52,8 @@
 /* Home Page */
 
 .site-logo {
+  margin-left: auto;
+  margin-right: auto;
   width: 30vh;
   transition: 0.2s;
 }
@@ -299,6 +301,11 @@
   font-size: 22pt;
   color: var(--pink);
   margin: 20px 0px 20px 0px;
+}
+
+.lose-image {
+  margin-left: auto;
+  margin-right: auto;
 }
 
 #lose-score {

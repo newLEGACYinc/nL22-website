@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import styles from './KayfableApp.module.css';
-import Guess from './Guess'
+import Guess from './Guess';
 
 function Game(props) {
     const [searchTerm, setSearchTerm] = useState('');
@@ -255,65 +255,68 @@ function Game(props) {
     };
 
     return (
-        <div className={styles["Kayfable"]}>
-            <h2>Kayfable</h2>
-            <h3>A Wrestling Wordle-like Game</h3>
-
-            {props.gameStatus !== "IN PROGRESS" ?
-                <button onClick={() => props.toggleModal()}>See Results</button> :
-                <div className={styles["kayfable-guess-area"]}>
-                    <form onSubmit={handleInput}>
-                        <input
-                            className={styles["kayfable-dropdown-input"]}
-                            type="text"
-                            placeholder={`Guess ${props.guesses.length + 1} out of 10`}
-                            onChange={(e) => { setSearchTerm(e.target.value); }}
-                            value={searchTerm || ""}
-                            required></input>
-                    </form>
-                    {autoComplete.length > 0 &&
-                        <ul className={styles["kayfable-dropdown-list"]}>
-                            {
-                                autoComplete.map((definition, index) => (
-                                    <li
-                                        className={styles["kayfable-dropdown-content"]}
-                                        key={index}
-                                        onClick={() => handleSelect(definition.id)}>
-                                        {definition.name === definition.gimmick ? definition.name : `${definition.gimmick} (${definition.name})`}
-                                    </li>
-                                ))
-                            }
-
-                        </ul>
+        <>
+            <div className="flex flex-col justify-center text-center pt-4 md:pt-8">
+                <div className='flex justify-center md:mb-4 pb-4'>
+                    {props.gameStatus !== "IN PROGRESS" ?
+                                        <button type="button" onClick={props.toggleModal} className="text-sky-900 bg-gray-200 hover:text-white hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
+                                        <span>See Results</span>
+                                    </button>
+                        : <div className="relative mt-6 md:max-w-lg pb-0 md:mx-auto">
+                            <form onSubmit={handleInput} className='flex'>
+                                <input
+                                    className="md:ml-5 w-64 md:w-80 border text-center rounded-md md:pl-4 md:pr-4 py-2 focus:border-indigo-600 focus:outline-none focus:shadow-outline"
+                                    type="text"
+                                    placeholder={`Guess ${props.guesses.length + 1} out of 10`}
+                                    onChange={(e) => { setSearchTerm(e.target.value); }}
+                                    value={searchTerm || ""}
+                                    required></input>
+                            </form>
+                            {autoComplete.length > 0 &&
+                                (<ul className='md:ml-5 absolute inset-x-0 top-full bg-indigo-200 border border-indigo-500 rounded-md z-20'>
+                                    {
+                                        autoComplete.map((definition, index) => (
+                                            <li
+                                                className="px-4 py-2 text-indigo-700 hover:bg-indigo-500 hover:text-white cursor-pointer"
+                                                key={index}
+                                                onClick={() => handleSelect(definition.id)}>
+                                                {definition.name === definition.gimmick ? definition.name : `${definition.gimmick} (${definition.name})`}
+                                            </li>
+                                        ))
+                                    }
+                                </ul>
+                                )}
+                        </div>
                     }
-                </div>}
-            <div className={styles["kayfable-table"]}>
-                <table>
-                    <thead>
-                        <tr>
-                            <th scope="col">Name</th>
-                            <th scope="col">Gender</th>
-                            <th scope="col">Age</th>
-                            <th scope="col">Country of Birth</th>
-                            <th scope="col">Debut Year</th>
-                            <th scope="col">Height (cm)</th>
-                            <th scope="col">Weight (kg)</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {props.guesses.length === props.evaluations.length &&
-                            props.guesses.map((guess, index) => (
-                                <Guess
-                                    key={`guess ${index}`}
-                                    guess={guess}
-                                    evaluations={props.evaluations[index]}
-                                    hardMode={props.hardMode}
-                                />
-                            ))}
-                    </tbody>
-                </table>
-            </div>
-        </div >
+                </div>
+                <div className={styles["kayfable-table"]}>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th scope="col">Name</th>
+                                <th scope="col">Gender</th>
+                                <th scope="col">Age</th>
+                                <th scope="col">Country of Birth</th>
+                                <th scope="col">Debut Year</th>
+                                <th scope="col">Height (cm)</th>
+                                <th scope="col">Weight (kg)</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {props.guesses.length === props.evaluations.length &&
+                                props.guesses.map((guess, index) => (
+                                    <Guess
+                                        key={`guess ${index}`}
+                                        guess={guess}
+                                        evaluations={props.evaluations[index]}
+                                        hardMode={props.hardMode}
+                                    />
+                                ))}
+                        </tbody>
+                    </table>
+                </div>
+            </div >
+        </>
     );
 }
 

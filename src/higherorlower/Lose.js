@@ -29,8 +29,8 @@ function Lose(props) {
         <div id={styles["lose-cont"]}>
             <div className={styles['lose-center']}>
                 {newHighScore ?
-                    <img src="images/highscore.png" alt="Sadge" className={styles["sadge"]} style={{ filter: "drop-shadow(2px 2px 5px black)" }} /> :
-                    <img src="images/lose.png" alt="Sadge" className={styles["sadge"]} style={{ filter: "drop-shadow(2px 2px 5px black)" }} />}
+                    <img src="images/highscore.png" alt="Sadge" className={styles["lose-image"]} style={{ filter: "drop-shadow(2px 2px 5px black)" }} /> :
+                    <img src="images/lose.png" alt="Sadge" className={styles["lose-image"]} style={{ filter: "drop-shadow(2px 2px 5px black)" }} />}
                 {newHighScore ?
                     <div className={styles["lose-desc"]}>You got a new high score!</div> :
                     <div className={styles["lose-desc"]}>You lost!</div>}

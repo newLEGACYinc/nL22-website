@@ -396,7 +396,7 @@ def load_kayfable_answer():
     id = date.strftime("%Y%m%d")
     if answer.count_documents({"game_id": id}, limit=1) == 0:
         record = list(kwrestler.aggregate([
-            {"$match": {"$or": [{"birth_date": {"$ne": "N/A"}}, {"debut_year": {"$ne": "N/A"}}, {"height": {"$ne": "N/A"}}, {"weight": {"$ne": "N/A"}}]}}, {"$sample": {"size": 1}}]))[0]
+            {"$match": {"$and": [{"birth_date": {"$ne": "N/A"}}, {"debut_year": {"$ne": "N/A"}}, {"height": {"$ne": "N/A"}}, {"weight": {"$ne": "N/A"}}]}}, {"$sample": {"size": 1}}]))[0]
     else:
         answer_record = answer.find_one({"game_id": id})
         record = kwrestler.find_one({"id": answer_record["id"]})

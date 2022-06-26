@@ -2,6 +2,7 @@ import styles from './KayfableApp.module.css';
 import Game from './Game';
 import Share from './Share';
 import Modal from 'react-modal';
+import Header from './Header';
 import axios from "axios";
 import React, { useState, useEffect } from "react";
 
@@ -147,8 +148,12 @@ function KayfableApp() {
         setHardMode(!hardMode)
     }
 
-    function toggleModal() {
-        setShowModal(!showModal)
+    function openModal() {
+        setShowModal(true)
+    }
+
+    function closeModal() {
+        setShowModal(false)
     }
 
     function guessCallback(guesses) {
@@ -209,50 +214,49 @@ function KayfableApp() {
     }, [evaluations.length, evaluations]);
 
     return (
-        <div>
+        <div className="flex flex-col bg-white h-screen w-screen">
             {isAppReady &&
-                <div>
-                    <header className={styles["kayfable-header"]}>{guesses.length < 1 &&
-                        <div>
-                            <input
-                                type="checkbox"
-                                checked={hardMode}
-                                onChange={toggleDifficulty}
-                                value="Hard Mode" />
-                            <span>Hard Mode</span>
-                        </div>}
-                    </header>
-                    <Game
-                        wrestlerList={wrestlerList}
-                        nameList={nameList}
-                        localStats={localStats}
-                        answer={answer}
+                <>
+                    <Header
                         guesses={guesses}
-                        evaluations={evaluations}
-                        gameStatus={gameStatus}
                         hardMode={hardMode}
-                        guessCallback={guessCallback}
-                        evaluationsCallback={evaluationsCallback}
-                        stateCallback={stateCallback}
-                        localStatsCallback={localStatsCallback}
-                        toggleModal={toggleModal}
-                    />
-                    <Modal
-                        isOpen={showModal}
-                        contentLabel="Game Over Modal"
-                        className={styles["kayfable-modal"]}
-                        overlayClassName={styles["kayfable-overlay"]}
-                        appElement={document.getElementById('root')}>
-                        <div style={{ textAlign: 'center' }}>
-                            <h2 style={{ fontSize: '1.5rem', lineHeight: '2rem', paddingTop: '0.5rem', paddingBottom: '0.5rem', fontWeight: '700' }}>
-                                {gameStatus === 'WIN' ? "Good Job!" : "Better Luck Next Time"}
-                            </h2>
-                            <span>Today's Wrestler Was</span><br />
-                            <span style={{ fontWeight: '700' }}>{answer.name}</span><br />
-                            <Share result={gameStatus} evaluations={evaluations} answer={answer} hardMode={hardMode} /><br />
-                            <a href={`https://www.cagematch.net/?id=2&nr=${answer.id}`} target="_blank" >View Cagematch Profile</a>
-                        </div>
-                    </Modal></div>}
+                        toggleDifficulty={toggleDifficulty} />
+                    <div className="justify-center flex-grow lg:m-auto">
+                        <Game
+                            wrestlerList={wrestlerList}
+                            nameList={nameList}
+                            localStats={localStats}
+                            answer={answer}
+                            guesses={guesses}
+                            evaluations={evaluations}
+                            gameStatus={gameStatus}
+                            hardMode={hardMode}
+                            guessCallback={guessCallback}
+                            evaluationsCallback={evaluationsCallback}
+                            stateCallback={stateCallback}
+                            localStatsCallback={localStatsCallback}
+                            toggleModal={openModal}
+                        />
+                        <Modal
+                            isOpen={showModal}
+                            onRequestClose={closeModal}
+                            contentLabel="Game Over Modal"
+                            className={styles["kayfable-modal"]}
+                            overlayClassName={styles["kayfable-overlay"]}
+                            appElement={document.getElementById('root')}>
+                            <div style={{ textAlign: 'center' }}>
+                                <h2 style={{ fontSize: '1.5rem', lineHeight: '2rem', paddingTop: '0.5rem', paddingBottom: '0.5rem', fontWeight: '700' }}>
+                                    {gameStatus === 'WIN' ? "Good Job!" : "Better Luck Next Time"}
+                                </h2>
+                                <span>Today's Wrestler Was</span><br />
+                                <span style={{ fontWeight: '700' }}>{answer.name}</span><br /><br />
+                                <Share result={gameStatus} evaluations={evaluations} answer={answer} hardMode={hardMode} /><br />
+                                <a href={`https://www.cagematch.net/?id=2&nr=${answer.id}`} target="_blank" rel="noreferrer">View Cagematch Profile</a>
+                            </div>
+                        </Modal>
+                    </div>
+                </>
+            }
         </div>
     )
 }
