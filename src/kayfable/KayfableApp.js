@@ -94,10 +94,8 @@ function KayfableApp() {
     const [showModal, setShowModal] = useState(false)
 
     useEffect(() => {
-        getWrestlerList()
-        getNameList();
+        getData();
         getLocalStats();
-        getAnswer();
         setIsAppReady(true);
     }, [])
 
@@ -121,27 +119,15 @@ function KayfableApp() {
         }
     }
 
-    async function getWrestlerList() {
-        axios.get('/api/kayfable/check/database').then((res) => {
-            setWrestlerList(res.data);
-        })
-    }
-
-    async function getNameList() {
-        axios.get('/api/kayfable/check/gimmick').then((res) => {
-            setNameList(res.data);
-        })
-    }
-
-    function getAnswer() {
+    function getData() {
         const savedResult = localStorage.getItem("gameState");
-        axios.get('/api/kayfable/answer').then((res) => {
+        axios.get('/api/kayfable/data').then((res) => {
             let currentGame = JSON.parse(savedResult)
-            if (savedResult === null || currentGame.game_id !== res.data.game_id) {
+            if (savedResult === null || currentGame.game_id !== res.data.answer.game_id) {
                 let result = {
                     "guesses": [],
                     "evaluations": [],
-                    "game_id": res.data.game_id,
+                    "game_id": res.data.answer.game_id,
                     "game_status": "IN PROGRESS"
                 }
                 localStorage.setItem("gameState", JSON.stringify(result))
@@ -149,8 +135,11 @@ function KayfableApp() {
                 setEvaluations([]);
                 setGameStatus("IN PROGRESS");
             }
-            setAnswer(res.data)
+            setWrestlerList(res.data.wrestlers)
+            setNameList(res.data.gimmicks)
+            setAnswer(res.data.answer)
         })
+
     }
 
     function toggleDifficulty() {
