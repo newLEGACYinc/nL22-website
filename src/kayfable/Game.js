@@ -1,6 +1,7 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, Fragment } from "react";
 import styles from './KayfableApp.module.css';
 import Guess from './Guess';
+import { Combobox } from '@headlessui/react'
 
 function Game(props) {
     const [searchTerm, setSearchTerm] = useState('');
@@ -259,33 +260,28 @@ function Game(props) {
             <div className="flex flex-col justify-center text-center pt-4 md:pt-8">
                 <div className='flex justify-center md:mb-4 pb-4'>
                     {props.gameStatus !== "IN PROGRESS" ?
-                                        <button type="button" onClick={props.toggleModal} className="text-sky-900 bg-gray-200 hover:text-white hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
-                                        <span>See Results</span>
-                                    </button>
+                        <button type="button" onClick={props.toggleModal} className="text-sky-900 bg-gray-200 hover:text-white hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
+                            <span>See Results</span>
+                        </button>
                         : <div className="relative mt-6 md:max-w-lg pb-0 md:mx-auto">
-                            <form onSubmit={handleInput} className='flex'>
-                                <input
-                                    className="md:ml-5 w-64 md:w-80 border text-center rounded-md md:pl-4 md:pr-4 py-2 focus:border-indigo-600 focus:outline-none focus:shadow-outline"
-                                    type="text"
-                                    placeholder={`Guess ${props.guesses.length + 1} out of 10`}
-                                    onChange={(e) => { setSearchTerm(e.target.value); }}
-                                    value={searchTerm || ""}
-                                    required></input>
-                            </form>
-                            {autoComplete.length > 0 &&
-                                (<ul className='md:ml-5 absolute inset-x-0 top-full bg-indigo-200 border border-indigo-500 rounded-md z-20'>
-                                    {
-                                        autoComplete.map((definition, index) => (
-                                            <li
-                                                className="px-4 py-2 text-indigo-700 hover:bg-indigo-500 hover:text-white cursor-pointer"
-                                                key={index}
-                                                onClick={() => handleSelect(definition.id)}>
-                                                {definition.name === definition.gimmick ? definition.name : `${definition.gimmick} (${definition.name})`}
-                                            </li>
-                                        ))
-                                    }
-                                </ul>
-                                )}
+                            <div className="flex">
+                                <Combobox value={searchTerm} onChange={setSearchTerm}>
+                                    <Combobox.Input onChange={(event) => setSearchTerm(event.target.value)} className="md:ml-5 w-64 md:w-80 border text-center rounded-md md:pl-4 md:pr-4 py-2 focus:border-indigo-600 focus:outline-none focus:shadow-outline" onKeyUp={(e) => e.code === "Enter" && handleInput(e)}/>
+                                    <Combobox.Options className='md:ml-5 absolute inset-x-0 top-full bg-indigo-200 border border-indigo-500 rounded-md z-20'>{autoComplete.map((definition, index) => (
+                                        <Combobox.Option key={index} value={definition.name} as={Fragment} onClick={() => handleSelect(definition.id)}>
+                                            {({ active }) => (
+                                                <li
+                                                    className={`px-4 py-2 text-indigo-700 ${active ? 'bg-indigo-500 text-white' : 'bg-indigo-200 text-indigo-700'
+                                                        }`}
+                                                >
+                                                    {definition.name === definition.gimmick ? definition.name : `${definition.gimmick} (${definition.name})`}
+                                                </li>
+                                            )}
+                                            
+                                        </Combobox.Option>))}
+                                    </Combobox.Options>
+                                </Combobox>
+                            </div>
                         </div>
                     }
                 </div>

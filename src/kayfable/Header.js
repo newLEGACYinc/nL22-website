@@ -1,6 +1,14 @@
 import Modal from 'react-modal'
 import React, { useState, useEffect } from "react";
 import styles from './KayfableApp.module.css';
+import {
+    ChartBarIcon,
+    InformationCircleIcon,
+    CogIcon,
+    XIcon
+} from '@heroicons/react/outline'
+import { Switch } from '@headlessui/react'
+
 
 function Header(props) {
     const [helpIsOpen, setHelpIsOpen] = useState(false);
@@ -32,10 +40,10 @@ function Header(props) {
     }
 
     return (
-        <div>
-            <button onClick={openHelpModal}>Help</button>
-            <button onClick={openStatsModal}>Stats</button>
-            <button onClick={openSettingsModal}>Settings</button>
+        <div className="flex py-4 justify-center bg-pickleBlue w-full items-center">
+            <InformationCircleIcon onClick={openHelpModal} className='h-8 w-8 cursor-pointer stroke-black' />
+            <ChartBarIcon onClick={openStatsModal} className='h-8 w-8 cursor-pointer stroke-black' />
+            <CogIcon onClick={openSettingsModal} className='h-8 w-8 cursor-pointer stroke-black' />
             <Modal
                 isOpen={helpIsOpen}
                 onRequestClose={closeHelpModal}
@@ -43,8 +51,8 @@ function Header(props) {
                 className={styles["kayfable-modal"]}
                 overlayClassName={styles["kayfable-overlay"]}
                 appElement={document.getElementById('root')}>
-                <button className='' onClick={closeHelpModal}>Close</button>
-                <h2 className='text-sky-900 text-center text-xl md:text-3xl font-bold m-4 md:m-10'>Guess the Wrestler</h2>
+                <XIcon className='h-8 w-8 cursor-pointer stroke-black mt-4' onClick={closeHelpModal} />
+                <h2 className='text-sky-900 text-center text-xl md:text-3xl font-bold md:mb-10'>Guess the Wrestler</h2>
                 <ul className='list-disc mx-2 md:mx-8'>
                     <li className="m-2">You get ten guesses.</li>
                     <li className="m-2"><span className="bg-green-500 p-1">Green</span> in any column indicates a match!</li>
@@ -72,21 +80,41 @@ function Header(props) {
                 className={styles["kayfable-modal"]}
                 overlayClassName={styles["kayfable-overlay"]}
                 appElement={document.getElementById('root')}>
-                <button className='' onClick={closeSettingsModal}>Close</button>
-                <ul>
-                    <li>
-                        <input
-                            type="checkbox"
-                            checked={props.hardMode}
-                            onChange={props.toggleDifficulty}
-                            value="Hard Mode" 
-                            disabled={props.guesses.length >= 1 ? true: false}/>
-                        <span>Hard Mode</span></li>
-                    <li>
-                        <input
-                            type="checkbox"
-                            value="Dark Mode" />
-                        <span>Dark Mode</span></li>
+                <XIcon className='h-8 w-8 cursor-pointer stroke-black mt-4' onClick={closeSettingsModal} />
+                <h2 className='text-sky-900 text-center text-xl md:text-3xl font-bold md:mb-4'>Settings</h2>
+                <ul className='list-none mx-2 md:mx-8'>
+                    <li className="m-2">
+                        <Switch.Group>
+                            <Switch.Label className="mr-20">Hard Mode</Switch.Label>
+                            <Switch
+                                checked={props.hardMode}
+                                onChange={props.toggleDifficulty}
+                                className={`${props.hardMode ? 'bg-blue-600' : 'bg-gray-200'
+                                    } relative inline-flex h-6 w-11 items-center rounded-full`} >
+                                <span
+                                    className={`transform transition ease-in-out duration-200 
+                                    ${props.hardMode ? 'translate-x-6' : 'translate-x-1'
+                                        } inline-block h-4 w-4 transform rounded-full bg-white`}
+                                />
+                            </Switch>
+                        </Switch.Group>
+                    </li>
+                    <li className="m-2">
+                        <Switch.Group>
+                            <Switch.Label className="mr-20">Dark Mode</Switch.Label>
+                            <Switch
+                                checked={props.darkMode}
+                                onChange={props.toggleDarkMode}
+                                className={`${props.darkMode ? 'bg-blue-600' : 'bg-gray-200'
+                                    } relative inline-flex h-6 w-11 items-center rounded-full`} >
+                                <span
+                                    className={`transform transition ease-in-out duration-200 
+                                    ${props.darkMode ? 'translate-x-6' : 'translate-x-1'
+                                        } inline-block h-4 w-4 transform rounded-full bg-white`}
+                                />
+                            </Switch>
+                        </Switch.Group>
+                    </li>
                 </ul>
 
             </Modal>

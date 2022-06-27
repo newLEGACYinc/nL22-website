@@ -82,6 +82,15 @@ function KayfableApp() {
         return false;
     })
 
+    const [darkMode, setDarkMode] = useState(() => {
+        const savedResult = localStorage.getItem("localStats");
+        if (savedResult !== null) {
+            const local = JSON.parse(savedResult);
+            return local.hard_mode;
+        }
+        return false;
+    })
+
     const [showModal, setShowModal] = useState(false)
 
     useEffect(() => {
@@ -113,20 +122,20 @@ function KayfableApp() {
     }
 
     async function getWrestlerList() {
-        axios.get('/kayfable/check/database').then((res) => {
+        axios.get('/api/kayfable/check/database').then((res) => {
             setWrestlerList(res.data);
         })
     }
 
     async function getNameList() {
-        axios.get('/kayfable/check/gimmick').then((res) => {
+        axios.get('/api/kayfable/check/gimmick').then((res) => {
             setNameList(res.data);
         })
     }
 
     function getAnswer() {
         const savedResult = localStorage.getItem("gameState");
-        axios.get('/kayfable/answer').then((res) => {
+        axios.get('/api/kayfable/answer').then((res) => {
             let currentGame = JSON.parse(savedResult)
             if (savedResult === null || currentGame.game_id !== res.data.game_id) {
                 let result = {
@@ -145,7 +154,13 @@ function KayfableApp() {
     }
 
     function toggleDifficulty() {
-        setHardMode(!hardMode)
+        if (guesses.length < 1) {
+            setHardMode(!hardMode)
+        }
+    }
+
+    function toggleDarkMode() {
+        setDarkMode(!darkMode)
     }
 
     function openModal() {
@@ -220,7 +235,9 @@ function KayfableApp() {
                     <Header
                         guesses={guesses}
                         hardMode={hardMode}
-                        toggleDifficulty={toggleDifficulty} />
+                        darkMode={darkMode}
+                        toggleDifficulty={toggleDifficulty} 
+                        toggleDarkMode={toggleDarkMode} />
                     <div className="justify-center flex-grow lg:m-auto">
                         <Game
                             wrestlerList={wrestlerList}

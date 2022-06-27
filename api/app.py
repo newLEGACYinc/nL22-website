@@ -136,16 +136,16 @@ def databasedata(type=None, id=None):
     }
 
 
-@app.route("/higherorlower/database")
-@app.route("/higherorlower/database/<type>")
-@app.route("/higherorlower/database/<type>/<id>")
+@app.route("/api/higherorlower/database")
+@app.route("/api/higherorlower/database/<type>")
+@app.route("/api/higherorlower/database/<type>/<id>")
 def load_database_data(type=None, id=None):
     return databasedata(type, id)
 
 
-@app.route("/higherorlower/data")
-@app.route("/higherorlower/data/<type>")
-@app.route("/higherorlower/data/<type>/<id>")
+@app.route("/api/higherorlower/data")
+@app.route("/api/higherorlower/data/<type>")
+@app.route("/api/higherorlower/data/<type>/<id>")
 def load_data(type=None, id=None):
     if type == None:
         type = random.choice(["promotion", "wrestler"])
@@ -163,7 +163,7 @@ def load_data(type=None, id=None):
         return twitterdata(record, promotion, type)
 
 
-@app.route("/higherorlower/blacklist/<type>/<id>")
+@app.route("/api/higherorlower/blacklist/<type>/<id>")
 def blacklist_data(type, id):
     if type == "wrestler":
         name = wrestler.find_one({"id": int(id)})["name"]
@@ -179,7 +179,7 @@ def blacklist_data(type, id):
         return f"<a href=https://www.cagematch.net/?id=8&nr={id}>{name}</a> Blacklisted"
 
 
-@app.route("/higherorlower/whitelist/<type>/<id>")
+@app.route("/api/higherorlower/whitelist/<type>/<id>")
 def whitelist_data(type, id):
     if type == "wrestler":
         name = w_blacklist.find_one({"id": int(id)})["name"]
@@ -191,13 +191,13 @@ def whitelist_data(type, id):
         return f"<a href=https://www.cagematch.net/?id=8&nr={id}>{name}</a> Whitelisted"
 
 
-@app.route("/higherorlower/scrape")
+@app.route("/api/higherorlower/scrape")
 def scrape_hol_date():
     string = holscrape()
     return "Higher or Lower Scrape Complete" + string
 
 
-@app.route("/higherorlower/check/<type>")
+@app.route("/api/higherorlower/check/<type>")
 def check_hol(type):
     string = []
     if type == "wrestler":
@@ -349,15 +349,15 @@ def k_scrape():
     return("Kayfable Scrape Complete</br>" + string)
 
 
-@app.route("/kayfable/scrape")
+@app.route("/api/kayfable/scrape")
 def kayfable_scrape():
     k_string = k_scrape()
     kg_string = kgimmick_scrape()
     return(k_string + "</br>" + kg_string)
 
 
-@app.route("/kayfable/database")
-@app.route("/kayfable/database/<id>")
+@app.route("/api/kayfable/database")
+@app.route("/api/kayfable/database/<id>")
 def load_kayfable_database(id):
     result = kwrestler.find_one({"id": int(id)})
     return {
@@ -372,7 +372,7 @@ def load_kayfable_database(id):
     }
 
 
-@app.route("/kayfable/valid")
+@app.route("/api/kayfable/valid")
 def load_kayfable_valid():
     string = []
     records = list(kwrestler.aggregate([
@@ -390,7 +390,7 @@ def load_kayfable_valid():
     return jsonify(string)
 
 
-@app.route("/kayfable/answer")
+@app.route("/api/kayfable/answer")
 def load_kayfable_answer():
     date = datetime.now()
     id = date.strftime("%Y%m%d")
@@ -444,7 +444,7 @@ def calculate_age(birth_date):
         return "N/A"
 
 
-@app.route("/kayfable/guess/<id>")
+@app.route("/api/kayfable/guess/<id>")
 def load_guess(id):
     result = kwrestler.find_one({"id": int(id)})
     return {
@@ -459,7 +459,7 @@ def load_guess(id):
     }
 
 
-@app.route("/kayfable/check/<type>")
+@app.route("/api/kayfable/check/<type>")
 def check_kayfable(type):
     string = []
     if type == "database":
