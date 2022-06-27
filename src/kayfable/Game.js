@@ -76,6 +76,7 @@ function Game(props) {
                         newStats = { ...newStats, "max_streak": props.localStats.current_streak + 1 }
                     }
                     props.localStatsCallback(newStats)
+                    props.toggleModal();
                 } else if (props.guesses.length >= 9) {
                     props.stateCallback("LOSE");
                     let newStats = {
@@ -83,6 +84,7 @@ function Game(props) {
                         attempts: { ...props.localStats.attempts, "fail": props.localStats.attempts["fail"] + 1 }
                     };
                     props.localStatsCallback(newStats)
+                    props.toggleModal();
                 }
             } catch (error) {
                 console.error(error);

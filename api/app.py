@@ -416,6 +416,15 @@ def load_kayfable_answer():
             {"game_id": id}, {"game_id": id, "id": record["id"]}, upsert=True)
     return result
 
+@app.route("/api/kayfable/data")
+def load_kayfable_data():
+    string = {
+        "wrestlers": check_kayfable("database"),
+        "gimmicks": check_kayfable("gimmick"),
+        "answer": load_kayfable_answer()
+    }
+    return jsonify(string)
+
 
 def calculate_age(birth_date):
     today = datetime.today()
@@ -490,7 +499,7 @@ def check_kayfable(type):
                 "gimmick": x["gimmick"].strip()
             }
             string.append(record)
-    return jsonify(string)
+    return string
 
 
 if __name__ == "__main__":

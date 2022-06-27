@@ -85,7 +85,7 @@ function Header(props) {
                 <ul className='list-none mx-2 md:mx-8'>
                     <li className="m-2">
                         <Switch.Group>
-                            <Switch.Label className="mr-20">Hard Mode</Switch.Label>
+                            <Switch.Label className="mr-80">Hard Mode</Switch.Label>
                             <Switch
                                 checked={props.hardMode}
                                 onChange={props.toggleDifficulty}
@@ -101,7 +101,7 @@ function Header(props) {
                     </li>
                     <li className="m-2">
                         <Switch.Group>
-                            <Switch.Label className="mr-20">Dark Mode</Switch.Label>
+                            <Switch.Label className="mr-80">Dark Mode</Switch.Label>
                             <Switch
                                 checked={props.darkMode}
                                 onChange={props.toggleDarkMode}
