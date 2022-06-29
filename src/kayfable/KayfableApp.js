@@ -2,9 +2,10 @@ import styles from './KayfableApp.module.css';
 import Game from './Game';
 import Share from './Share';
 import Modal from 'react-modal';
+import { Dialog, Transition } from '@headlessui/react'
 import Header from './Header';
 import axios from "axios";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, Fragment } from "react";
 
 function KayfableApp() {
     const [isAppReady, setIsAppReady] = useState(false);
@@ -218,51 +219,80 @@ function KayfableApp() {
     }, [evaluations.length, evaluations]);
 
     return (
-        <div className="flex flex-col bg-white h-screen w-screen">
-            {isAppReady &&
-                <>
-                    <Header
-                        guesses={guesses}
-                        hardMode={hardMode}
-                        darkMode={darkMode}
-                        toggleDifficulty={toggleDifficulty} 
-                        toggleDarkMode={toggleDarkMode} />
-                    <div className="justify-center flex-grow lg:m-auto">
-                        <Game
-                            wrestlerList={wrestlerList}
-                            nameList={nameList}
-                            localStats={localStats}
-                            answer={answer}
+        <div className={`${darkMode && 'dark'}`}>
+            <div className="flex flex-col bg-slate-200 dark:bg-slate-800 h-screen w-screen">
+                {isAppReady &&
+                    <>
+                        <Header
                             guesses={guesses}
-                            evaluations={evaluations}
-                            gameStatus={gameStatus}
                             hardMode={hardMode}
-                            guessCallback={guessCallback}
-                            evaluationsCallback={evaluationsCallback}
-                            stateCallback={stateCallback}
-                            localStatsCallback={localStatsCallback}
-                            toggleModal={openModal}
-                        />
-                        <Modal
-                            isOpen={showModal}
-                            onRequestClose={closeModal}
-                            contentLabel="Game Over Modal"
-                            className={styles["kayfable-modal"]}
-                            overlayClassName={styles["kayfable-overlay"]}
-                            appElement={document.getElementById('root')}>
-                            <div style={{ textAlign: 'center' }}>
-                                <h2 style={{ fontSize: '1.5rem', lineHeight: '2rem', paddingTop: '0.5rem', paddingBottom: '0.5rem', fontWeight: '700' }}>
-                                    {gameStatus === 'WIN' ? "Good Job!" : "Better Luck Next Time"}
-                                </h2>
-                                <span>Today's Wrestler Was</span><br />
-                                <span style={{ fontWeight: '700' }}>{answer.name}</span><br /><br />
-                                <Share result={gameStatus} evaluations={evaluations} answer={answer} hardMode={hardMode} /><br />
-                                <a href={`https://www.cagematch.net/?id=2&nr=${answer.id}`} target="_blank" rel="noreferrer">View Cagematch Profile</a>
-                            </div>
-                        </Modal>
-                    </div>
-                </>
-            }
+                            darkMode={darkMode}
+                            toggleDifficulty={toggleDifficulty}
+                            toggleDarkMode={toggleDarkMode} />
+                        <div className="justify-center flex-grow lg:m-auto">
+                            <Game
+                                wrestlerList={wrestlerList}
+                                nameList={nameList}
+                                localStats={localStats}
+                                answer={answer}
+                                guesses={guesses}
+                                evaluations={evaluations}
+                                gameStatus={gameStatus}
+                                hardMode={hardMode}
+                                guessCallback={guessCallback}
+                                evaluationsCallback={evaluationsCallback}
+                                stateCallback={stateCallback}
+                                localStatsCallback={localStatsCallback}
+                                toggleModal={openModal}
+                            />
+                            <Transition appear show={showModal} as={Fragment}>
+                                <Dialog
+                                    as="div"
+                                    onClose={closeModal}
+                                    className="absolute z-10">
+                                    <Transition.Child
+                                        as={Fragment}
+                                        enter="ease-out duration-300"
+                                        enterFrom="opacity-0"
+                                        enterTo="opacity-100"
+                                        leave="ease-in duration-200"
+                                        leaveFrom="opacity-100"
+                                        leaveTo="opacity-0"
+                                    >
+                                        <div className="fixed inset-0 bg-black bg-opacity-25" />
+                                    </Transition.Child>
+                                    <div className="fixed inset-0 flex items-center justify-center p-4">
+
+                                        <div className="flex min-h-full items-center justify-center p-4 text-center">
+
+                                            <Transition.Child
+                                                as={Fragment}
+                                                enter="ease-out duration-300"
+                                                enterFrom="opacity-0 scale-95"
+                                                enterTo="opacity-100 scale-100"
+                                                leave="ease-in duration-200"
+                                                leaveFrom="opacity-100 scale-100"
+                                                leaveTo="opacity-0 scale-95"
+                                            >
+                                                <Dialog.Panel className="w-full max-w-md transform overflow-hidden rounded-2xl bg-slate-200 text-black dark:bg-slate-800 dark:text-white p-6 text-left align-middle shadow-xl transition-all ">
+                                                    <Dialog.Title className='text-sky-900 dark:text-sky-300 text-center text-xl md:text-3xl font-bold md:mb-10'>
+                                                            {gameStatus === 'WIN' ? "Good Job!" : "Better Luck Next Time"}
+                                                    </Dialog.Title>
+
+                                                    <span>Today's Wrestler Was</span><br />
+                                                    <span style={{ fontWeight: '700' }}>{answer.name}</span><br /><br />
+                                                    <Share result={gameStatus} evaluations={evaluations} answer={answer} hardMode={hardMode} /><br />
+                                                    <a href={`https://www.cagematch.net/?id=2&nr=${answer.id}`} target="_blank" rel="noreferrer">View Cagematch Profile</a>
+                                                </Dialog.Panel>
+                                            </Transition.Child>
+                                        </div>
+                                    </div>
+                                </Dialog>
+                            </Transition>
+                        </div>
+                    </>
+                }
+            </div>
         </div>
     )
 }

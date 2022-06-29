@@ -62,29 +62,31 @@ function Game(props) {
         if (id) {
             try {
                 let guess = props.wrestlerList.find(x => x.id === id)
-                const guessResponse = validateGuess(guess)
-                const newGuesses = [...props.guesses, guess];
-                props.guessCallback(newGuesses);
-                props.evaluationsCallback([...props.evaluations, guessResponse])
-                if (guessResponse.Correct === true) {
-                    props.stateCallback("WIN");
-                    let newStats = {
-                        ...props.localStats, "games_won": props.localStats.games_won + 1, "games_played": props.localStats.games_played + 1,
-                        "current_streak": props.localStats.current_streak + 1, attempts: { ...props.localStats.attempts, [props.guesses.length + 1]: props.localStats.attempts[props.guesses.length + 1] + 1 }
-                    };
-                    if (props.localStats.current_streak + 1 > props.localStats.max_streak) {
-                        newStats = { ...newStats, "max_streak": props.localStats.current_streak + 1 }
+                if (!props.guesses.includes(guess)) {
+                    const guessResponse = validateGuess(guess)
+                    const newGuesses = [...props.guesses, guess];
+                    props.guessCallback(newGuesses);
+                    props.evaluationsCallback([...props.evaluations, guessResponse])
+                    if (guessResponse.Correct === true) {
+                        props.stateCallback("WIN");
+                        let newStats = {
+                            ...props.localStats, "games_won": props.localStats.games_won + 1, "games_played": props.localStats.games_played + 1,
+                            "current_streak": props.localStats.current_streak + 1, attempts: { ...props.localStats.attempts, [props.guesses.length + 1]: props.localStats.attempts[props.guesses.length + 1] + 1 }
+                        };
+                        if (props.localStats.current_streak + 1 > props.localStats.max_streak) {
+                            newStats = { ...newStats, "max_streak": props.localStats.current_streak + 1 }
+                        }
+                        props.localStatsCallback(newStats)
+                        props.toggleModal();
+                    } else if (props.guesses.length >= 9) {
+                        props.stateCallback("LOSE");
+                        let newStats = {
+                            ...props.localStats, "games_played": props.localStats.games_played + 1, "current_streak": 0,
+                            attempts: { ...props.localStats.attempts, "fail": props.localStats.attempts["fail"] + 1 }
+                        };
+                        props.localStatsCallback(newStats)
+                        props.toggleModal();
                     }
-                    props.localStatsCallback(newStats)
-                    props.toggleModal();
-                } else if (props.guesses.length >= 9) {
-                    props.stateCallback("LOSE");
-                    let newStats = {
-                        ...props.localStats, "games_played": props.localStats.games_played + 1, "current_streak": 0,
-                        attempts: { ...props.localStats.attempts, "fail": props.localStats.attempts["fail"] + 1 }
-                    };
-                    props.localStatsCallback(newStats)
-                    props.toggleModal();
                 }
             } catch (error) {
                 console.error(error);
@@ -239,16 +241,10 @@ function Game(props) {
         return response;
     };
 
-    function handleSelect(id) {
-        setSearchTerm('');
-        match(id);
-    };
-
-    function handleInput(e) {
-        e.preventDefault();
-        if (searchTerm.length > 0) {
+    function handleInput(definition) {
+        if (definition.length > 0) {
             try {
-                let suggestionList = matchFunction(searchTerm);
+                let suggestionList = matchFunction(definition);
                 setSearchTerm('');
                 match(suggestionList[0].id);
             } catch (error) {
@@ -262,15 +258,18 @@ function Game(props) {
             <div className="flex flex-col justify-center text-center pt-4 md:pt-8">
                 <div className='flex justify-center md:mb-4 pb-4'>
                     {props.gameStatus !== "IN PROGRESS" ?
-                        <button type="button" onClick={props.toggleModal} className="text-sky-900 bg-gray-200 hover:text-white hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
+                        <button type="button" onClick={props.toggleModal} className="text-white bg-blue-600 hover:text-white hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-bold rounded-lg text-sm px-5 py-2 text-center">
                             <span>See Results</span>
                         </button>
                         : <div className="relative mt-6 md:max-w-lg pb-0 md:mx-auto">
                             <div className="flex">
-                                <Combobox value={searchTerm} onChange={setSearchTerm}>
-                                    <Combobox.Input onChange={(event) => setSearchTerm(event.target.value)} className="md:ml-5 w-64 md:w-80 border text-center rounded-md md:pl-4 md:pr-4 py-2 focus:border-indigo-600 focus:outline-none focus:shadow-outline" onKeyUp={(e) => e.code === "Enter" && handleInput(e)}/>
+                                <Combobox value={searchTerm} onChange={(definition) => {
+                                    handleInput(definition)
+                                }}>
+                                    <Combobox.Input onChange={(event) => setSearchTerm(event.target.value)} className="md:ml-5 w-64 md:w-80 border text-center rounded-md md:pl-4 md:pr-4 py-2 focus:border-indigo-600 focus:outline-none focus:shadow-outline" />
+                                    {autoComplete.length > 0 && (
                                     <Combobox.Options className='md:ml-5 absolute inset-x-0 top-full bg-indigo-200 border border-indigo-500 rounded-md z-20'>{autoComplete.map((definition, index) => (
-                                        <Combobox.Option key={index} value={definition.name} as={Fragment} onClick={() => handleSelect(definition.id)}>
+                                        <Combobox.Option key={index} value={definition.name} as={Fragment}>
                                             {({ active }) => (
                                                 <li
                                                     className={`px-4 py-2 text-indigo-700 ${active ? 'bg-indigo-500 text-white' : 'bg-indigo-200 text-indigo-700'
@@ -279,9 +278,8 @@ function Game(props) {
                                                     {definition.name === definition.gimmick ? definition.name : `${definition.gimmick} (${definition.name})`}
                                                 </li>
                                             )}
-                                            
                                         </Combobox.Option>))}
-                                    </Combobox.Options>
+                                    </Combobox.Options>)}
                                 </Combobox>
                             </div>
                         </div>
