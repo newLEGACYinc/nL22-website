@@ -1,7 +1,5 @@
-import styles from './KayfableApp.module.css';
 import Game from './Game';
 import Share from './Share';
-import Modal from 'react-modal';
 import { Dialog, Transition } from '@headlessui/react'
 import Header from './Header';
 import axios from "axios";

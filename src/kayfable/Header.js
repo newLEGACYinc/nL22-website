@@ -1,5 +1,4 @@
 import React, { useState, Fragment } from "react";
-import styles from './KayfableApp.module.css';
 import {
     ChartBarIcon,
     InformationCircleIcon,
