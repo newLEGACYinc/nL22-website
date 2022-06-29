@@ -5,6 +5,7 @@ import {
     CogIcon
 } from '@heroicons/react/outline'
 import { Switch, Dialog, Transition } from '@headlessui/react'
+import logo from '../kayfable.svg';
 
 
 function Header(props) {
@@ -38,9 +39,8 @@ function Header(props) {
 
     return (
         <div className="flex py-4 justify-center w-full items-center">
+            <div className='h-8 w-8 cursor-pointer stroke-black dark:stroke-white' />
             <InformationCircleIcon onClick={openHelpModal} className='h-8 w-8 cursor-pointer stroke-black dark:stroke-white' />
-            <ChartBarIcon onClick={openStatsModal} className='h-8 w-8 cursor-pointer stroke-black dark:stroke-white' />
-            <CogIcon onClick={openSettingsModal} className='h-8 w-8 cursor-pointer stroke-black dark:stroke-white' />
             <Transition appear show={helpIsOpen} as={Fragment}>
                 <Dialog
                     as="div"
@@ -69,8 +69,8 @@ function Header(props) {
                                 leaveTo="opacity-0 scale-95"
                             >
                                 <Dialog.Panel className="w-full max-w-md transform overflow-hidden rounded-2xl bg-slate-200 text-black dark:bg-slate-800 dark:text-white p-6 text-left align-middle shadow-xl transition-all ">
-                                    <Dialog.Title>
-                                        <span className='text-sky-900 dark:text-sky-300 text-center text-xl md:text-3xl font-bold md:mb-10'>Guess the Wrestler</span>
+                                    <Dialog.Title className='text-sky-900 dark:text-sky-300 text-center text-xl md:text-3xl font-bold md:mb-10'>
+                                        Guess the Wrestler
                                     </Dialog.Title>
                                     <ul className='list-disc mx-2 md:mx-8'>
                                         <li className="m-2">You get ten guesses.</li>
@@ -88,6 +88,14 @@ function Header(props) {
                     </div>
                 </Dialog>
             </Transition>
+
+            <div className='flex flex-col w-1/6 text-center items-center'>
+                <img src={logo} />
+                <div className='flex text-black text-sm md:text-lg font-bold'>The Wrestler Guessing Game</div>
+            </div>
+            <ChartBarIcon onClick={openStatsModal} className='h-8 w-8 cursor-pointer stroke-black dark:stroke-white' />
+            <CogIcon onClick={openSettingsModal} className='h-8 w-8 cursor-pointer stroke-black dark:stroke-white' />
+
             <Transition appear show={statsIsOpen} as={Fragment}>
                 <Dialog
                     as="div"
@@ -116,8 +124,8 @@ function Header(props) {
                                 leaveTo="opacity-0 scale-95"
                             >
                                 <Dialog.Panel className="w-full max-w-md transform overflow-hidden rounded-2xl bg-slate-200 text-black dark:bg-slate-800 dark:text-white p-6 text-left align-middle shadow-xl transition-all ">
-                                    <Dialog.Title>
-                                        <h2 className='text-sky-900 dark:text-sky-300 text-center text-xl md:text-3xl font-bold md:mb-10'>Statistics</h2>
+                                    <Dialog.Title className='text-sky-900 dark:text-sky-300 text-center text-xl md:text-3xl font-bold md:mb-10'>
+                                        Statistics
                                     </Dialog.Title>
                                 </Dialog.Panel>
                             </Transition.Child>
@@ -153,8 +161,8 @@ function Header(props) {
                                 leaveTo="opacity-0 scale-95"
                             >
                                 <Dialog.Panel className="w-full max-w-md transform overflow-hidden rounded-2xl bg-slate-200 text-black dark:bg-slate-800 dark:text-white p-6 text-left align-middle shadow-xl transition-all ">
-                                    <Dialog.Title>
-                                        <h2 className='text-sky-900 dark:text-sky-300 text-center text-xl md:text-3xl font-bold md:mb-10'>Settings</h2>
+                                    <Dialog.Title className='text-sky-900 dark:text-sky-300 text-center text-xl md:text-3xl font-bold md:mb-10'>
+                                        Settings
                                     </Dialog.Title>
                                     <ul className='list-none mx-2 md:mx-8'>
                                         <li className="m-2">

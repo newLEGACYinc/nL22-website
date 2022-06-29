@@ -241,18 +241,6 @@ function Game(props) {
         return response;
     };
 
-    function handleInput(definition) {
-        if (definition.length > 0) {
-            try {
-                let suggestionList = matchFunction(definition);
-                setSearchTerm('');
-                match(suggestionList[0].id);
-            } catch (error) {
-                console.log("No Wrestler Found")
-            }
-        }
-    };
-
     return (
         <>
             <div className="flex flex-col justify-center text-center pt-4 md:pt-8">
@@ -263,23 +251,28 @@ function Game(props) {
                         </button>
                         : <div className="relative mt-6 md:max-w-lg pb-0 md:mx-auto">
                             <div className="flex">
-                                <Combobox value={searchTerm} onChange={(definition) => {
-                                    handleInput(definition)
+                                <Combobox value={searchTerm} onChange={(id) => {
+                                    try {
+                                        setSearchTerm('');
+                                        match(id);
+                                    } catch (error) {
+                                        console.log("No Wrestler Found")
+                                    }
                                 }}>
-                                    <Combobox.Input onChange={(event) => setSearchTerm(event.target.value)} className="md:ml-5 w-64 md:w-80 border text-center rounded-md md:pl-4 md:pr-4 py-2 focus:border-indigo-600 focus:outline-none focus:shadow-outline" />
+                                    <Combobox.Input onChange={(event) => setSearchTerm(event.target.value)} className="w-64 md:w-80 border text-center rounded-md md:pl-4 md:pr-4 py-2 focus:border-indigo-600 focus:outline-none focus:shadow-outline" />
                                     {autoComplete.length > 0 && (
-                                    <Combobox.Options className='md:ml-5 absolute inset-x-0 top-full bg-indigo-200 border border-indigo-500 rounded-md z-20'>{autoComplete.map((definition, index) => (
-                                        <Combobox.Option key={index} value={definition.name} as={Fragment}>
-                                            {({ active }) => (
-                                                <li
-                                                    className={`px-4 py-2 text-indigo-700 ${active ? 'bg-indigo-500 text-white' : 'bg-indigo-200 text-indigo-700'
-                                                        }`}
-                                                >
-                                                    {definition.name === definition.gimmick ? definition.name : `${definition.gimmick} (${definition.name})`}
-                                                </li>
-                                            )}
-                                        </Combobox.Option>))}
-                                    </Combobox.Options>)}
+                                        <Combobox.Options className='absolute inset-x-0 top-full bg-indigo-200 border border-indigo-500 rounded-md z-20'>{autoComplete.map((definition, index) => (
+                                            <Combobox.Option key={index} value={definition.id} as={Fragment}>
+                                                {({ active }) => (
+                                                    <li
+                                                        className={`px-4 py-2 text-indigo-700 ${active ? 'bg-indigo-500 text-white' : 'bg-indigo-200 text-indigo-700'
+                                                            }`}
+                                                    >
+                                                        {definition.name === definition.gimmick ? definition.name : `${definition.gimmick} (${definition.name})`}
+                                                    </li>
+                                                )}
+                                            </Combobox.Option>))}
+                                        </Combobox.Options>)}
                                 </Combobox>
                             </div>
                         </div>
