@@ -5,3 +5,7 @@
 body {
   overflow: hidden;
 }
+
+a {
+  @apply underline text-blue-600 dark:text-blue-300 hover:text-blue-800 dark:hover:text-blue-400 visited:text-purple-600 dark:visited:text-purple-300 
+}

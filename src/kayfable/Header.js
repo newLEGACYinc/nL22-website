@@ -5,7 +5,8 @@ import {
     CogIcon
 } from '@heroicons/react/outline'
 import { Switch, Dialog, Transition } from '@headlessui/react'
-import logo from '../kayfable.svg';
+import { ReactComponent as Logo } from '../kayfable.svg';
+import Stats from './Stats'
 
 
 function Header(props) {
@@ -38,9 +39,10 @@ function Header(props) {
     }
 
     return (
-        <div className="flex py-4 justify-center w-full items-center">
-            <div className='h-8 w-8 cursor-pointer stroke-black dark:stroke-white' />
-            <InformationCircleIcon onClick={openHelpModal} className='h-8 w-8 cursor-pointer stroke-black dark:stroke-white' />
+        <div className="flex py-4 justify-center w-full items-center bg-slate-400 dark:bg-slate-900">
+            <div className='flex w-1/4 justify-start'>
+                <InformationCircleIcon onClick={openHelpModal} className='h-8 w-8 cursor-pointer stroke-black dark:stroke-white' />
+            </div>
             <Transition appear show={helpIsOpen} as={Fragment}>
                 <Dialog
                     as="div"
@@ -68,8 +70,8 @@ function Header(props) {
                                 leaveFrom="opacity-100 scale-100"
                                 leaveTo="opacity-0 scale-95"
                             >
-                                <Dialog.Panel className="w-full max-w-md transform overflow-hidden rounded-2xl bg-slate-200 text-black dark:bg-slate-800 dark:text-white p-6 text-left align-middle shadow-xl transition-all ">
-                                    <Dialog.Title className='text-sky-900 dark:text-sky-300 text-center text-xl md:text-3xl font-bold md:mb-10'>
+                                <Dialog.Panel className="w-full max-w-md transform overflow-hidden rounded-2xl bg-slate-200 text-black dark:bg-slate-700 dark:text-white p-6 text-left align-middle shadow-xl transition-all ">
+                                    <Dialog.Title className='text-sky-900 dark:text-sky-300 text-center text-xl md:text-3xl font-bold md:mb-5'>
                                         Guess the Wrestler
                                     </Dialog.Title>
                                     <ul className='list-disc mx-2 md:mx-8'>
@@ -90,11 +92,14 @@ function Header(props) {
             </Transition>
 
             <div className='flex flex-col w-1/6 text-center items-center'>
-                <img src={logo} />
-                <div className='flex text-black text-sm md:text-lg font-bold'>The Wrestler Guessing Game</div>
+                <Logo fill={props.darkMode ? "white" : "black"} width="100%" height="50%" />
+                <div className='flex text-black dark:text-white text-sm md:text-lg font-bold mt-0'>The Wrestler Guessing Game</div>
             </div>
-            <ChartBarIcon onClick={openStatsModal} className='h-8 w-8 cursor-pointer stroke-black dark:stroke-white' />
-            <CogIcon onClick={openSettingsModal} className='h-8 w-8 cursor-pointer stroke-black dark:stroke-white' />
+
+            <div className='flex w-1/4 justify-end'>
+                <ChartBarIcon onClick={openStatsModal} className='h-8 w-8 cursor-pointer stroke-black dark:stroke-white' />
+                <CogIcon onClick={openSettingsModal} className='h-8 w-8 cursor-pointer stroke-black dark:stroke-white' />
+            </div>
 
             <Transition appear show={statsIsOpen} as={Fragment}>
                 <Dialog
@@ -123,10 +128,11 @@ function Header(props) {
                                 leaveFrom="opacity-100 scale-100"
                                 leaveTo="opacity-0 scale-95"
                             >
-                                <Dialog.Panel className="w-full max-w-md transform overflow-hidden rounded-2xl bg-slate-200 text-black dark:bg-slate-800 dark:text-white p-6 text-left align-middle shadow-xl transition-all ">
-                                    <Dialog.Title className='text-sky-900 dark:text-sky-300 text-center text-xl md:text-3xl font-bold md:mb-10'>
+                                <Dialog.Panel className="w-full max-w-md transform overflow-hidden rounded-2xl bg-slate-200 text-black dark:bg-slate-700 dark:text-white p-6 text-left align-middle shadow-xl transition-all ">
+                                    <Dialog.Title className='text-sky-900 dark:text-sky-300 text-center text-xl md:text-3xl font-bold md:mb-5'>
                                         Statistics
                                     </Dialog.Title>
+                                    <Stats darkMode={props.darkMode} localStats={props.localStats}/>
                                 </Dialog.Panel>
                             </Transition.Child>
                         </div>
@@ -160,7 +166,7 @@ function Header(props) {
                                 leaveFrom="opacity-100 scale-100"
                                 leaveTo="opacity-0 scale-95"
                             >
-                                <Dialog.Panel className="w-full max-w-md transform overflow-hidden rounded-2xl bg-slate-200 text-black dark:bg-slate-800 dark:text-white p-6 text-left align-middle shadow-xl transition-all ">
+                                <Dialog.Panel className="w-full max-w-md transform overflow-hidden rounded-2xl bg-slate-200 text-black dark:bg-slate-700 dark:text-white p-6 text-left align-middle shadow-xl transition-all ">
                                     <Dialog.Title className='text-sky-900 dark:text-sky-300 text-center text-xl md:text-3xl font-bold md:mb-10'>
                                         Settings
                                     </Dialog.Title>
@@ -171,7 +177,7 @@ function Header(props) {
                                                 <Switch
                                                     checked={props.hardMode}
                                                     onChange={props.toggleDifficulty}
-                                                    className={`${props.hardMode ? 'bg-blue-600' : 'bg-gray-200'
+                                                    className={`${props.hardMode ? 'bg-blue-600' : 'bg-gray-400 '
                                                         } relative inline-flex h-6 w-11 items-center rounded-full`} >
                                                     <span
                                                         className={`transform transition ease-in-out duration-200 
@@ -187,7 +193,7 @@ function Header(props) {
                                                 <Switch
                                                     checked={props.darkMode}
                                                     onChange={props.toggleDarkMode}
-                                                    className={`${props.darkMode ? 'bg-blue-600' : 'bg-gray-200'
+                                                    className={`${props.darkMode ? 'bg-blue-600' : 'bg-gray-400'
                                                         } relative inline-flex h-6 w-11 items-center rounded-full`} >
                                                     <span
                                                         className={`transform transition ease-in-out duration-200 

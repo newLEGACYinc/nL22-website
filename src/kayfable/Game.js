@@ -252,14 +252,10 @@ function Game(props) {
                         : <div className="relative mt-6 md:max-w-lg pb-0 md:mx-auto">
                             <div className="flex">
                                 <Combobox value={searchTerm} onChange={(id) => {
-                                    try {
-                                        setSearchTerm('');
-                                        match(id);
-                                    } catch (error) {
-                                        console.log("No Wrestler Found")
-                                    }
+                                    setSearchTerm('');
+                                    match(id);
                                 }}>
-                                    <Combobox.Input onChange={(event) => setSearchTerm(event.target.value)} className="w-64 md:w-80 border text-center rounded-md md:pl-4 md:pr-4 py-2 focus:border-indigo-600 focus:outline-none focus:shadow-outline" />
+                                    <Combobox.Input placeholder={`Guess ${props.guesses.length + 1} out of 10`}onChange={(event) => setSearchTerm(event.target.value)} className="w-64 md:w-80 border text-center rounded-md md:pl-4 md:pr-4 py-2 focus:border-indigo-600 focus:outline-none focus:shadow-outline" />
                                     {autoComplete.length > 0 && (
                                         <Combobox.Options className='absolute inset-x-0 top-full bg-indigo-200 border border-indigo-500 rounded-md z-20'>{autoComplete.map((definition, index) => (
                                             <Combobox.Option key={index} value={definition.id} as={Fragment}>
@@ -278,7 +274,7 @@ function Game(props) {
                         </div>
                     }
                 </div>
-                <div className={styles["kayfable-table"]}>
+                <div id="table-scroll" className={`${styles["kayfable-table"]} !text-sm md:!text-xl !w-full md:!w-4/5`}>
                     <table>
                         <thead>
                             <tr>

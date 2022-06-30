@@ -85,7 +85,7 @@ function KayfableApp() {
         const savedResult = localStorage.getItem("localStats");
         if (savedResult !== null) {
             const local = JSON.parse(savedResult);
-            return local.hard_mode;
+            return local.dark_mode;
         }
         return false;
     })
@@ -111,7 +111,8 @@ function KayfableApp() {
                 "games_played": 0,
                 "games_won": 0,
                 "average_attempts": 0,
-                "hard_mode": false
+                "hard_mode": false,
+                "dark_mode": false
             };
             localStorage.setItem("localStats", JSON.stringify(stats));
             setLocalStats(stats);
@@ -183,6 +184,13 @@ function KayfableApp() {
     }, [hardMode])
 
     useEffect(() => {
+        let newStats = {
+            ...localStats, "dark_mode": darkMode
+        };
+        setLocalStats(newStats)
+    }, [darkMode])
+
+    useEffect(() => {
         const savedResult = localStorage.getItem("gameState");
         if (savedResult !== null) {
             const gameState = JSON.parse(savedResult)
@@ -218,13 +226,14 @@ function KayfableApp() {
 
     return (
         <div className={`${darkMode && 'dark'}`}>
-            <div className="flex flex-col bg-slate-200 dark:bg-slate-800 h-screen w-screen">
+            <div className="flex flex-col bg-slate-200 dark:bg-slate-700 h-screen w-screen">
                 {isAppReady &&
                     <>
                         <Header
                             guesses={guesses}
                             hardMode={hardMode}
                             darkMode={darkMode}
+                            localStats={localStats}
                             toggleDifficulty={toggleDifficulty}
                             toggleDarkMode={toggleDarkMode} />
                         <div className="justify-center flex-grow lg:m-auto">
@@ -259,7 +268,7 @@ function KayfableApp() {
                                     >
                                         <div className="fixed inset-0 bg-black bg-opacity-25" />
                                     </Transition.Child>
-                                    <div className="fixed inset-0 flex items-center justify-center p-4">
+                                    <div className={`${darkMode && 'dark'} fixed inset-0 flex items-center justify-center p-4`}>
 
                                         <div className="flex min-h-full items-center justify-center p-4 text-center">
 
@@ -272,9 +281,9 @@ function KayfableApp() {
                                                 leaveFrom="opacity-100 scale-100"
                                                 leaveTo="opacity-0 scale-95"
                                             >
-                                                <Dialog.Panel className="w-full max-w-md transform overflow-hidden rounded-2xl bg-slate-200 text-black dark:bg-slate-800 dark:text-white p-6 text-left align-middle shadow-xl transition-all ">
-                                                    <Dialog.Title className='text-sky-900 dark:text-sky-300 text-center text-xl md:text-3xl font-bold md:mb-10'>
-                                                            {gameStatus === 'WIN' ? "Good Job!" : "Better Luck Next Time"}
+                                                <Dialog.Panel className="w-full max-w-md transform overflow-hidden rounded-2xl bg-slate-200 text-black dark:bg-slate-700 dark:text-white p-6 text-center align-middle shadow-xl transition-all ">
+                                                    <Dialog.Title className='text-sky-900 dark:text-sky-300 text-center text-xl md:text-3xl font-bold md:mb-5'>
+                                                        {gameStatus === 'WIN' ? "Good Job!" : "Better Luck Next Time"}
                                                     </Dialog.Title>
 
                                                     <span>Today's Wrestler Was</span><br />

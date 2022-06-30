@@ -53,7 +53,7 @@ function Share(props) {
     return (
         <div>
             {props.result &&
-                <div>
+                <div className="text-white bg-blue-600 hover:text-white hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-bold rounded-lg text-sm px-5 py-2 text-center cursor-pointer">
                     <button onClick={() => { navigator.clipboard.writeText(getResultText()); }}>Share</button>
                 </div>
             }
