@@ -8,22 +8,102 @@ function classNames(...classes) {
 
 function AdminApp() {
     const [categories] = useState({
-        Scrape: [
+        "General": [
             {
                 id: 1,
-                title: 'Kayfable',
+                title: 'Blacklist View',
+                type: "request",
+                url: ""
+            },
+            {
+                id: 2,
+                title: 'Blacklist Add',
+                type: "update",
+                url: ""
+            },
+            {
+                id: 3,
+                title: 'Blacklist Delete',
+                type: "update",
+                url: ""
+            },
+            {
+                id: 4,
+                title: 'Whitelist View',
+                type: "request",
+                url: ""
+            },
+            {
+                id: 5,
+                title: 'Whitelist Add',
+                type: "update",
+                url: ""
+            },
+            {
+                id: 6,
+                title: 'Whitelist Delete',
+                type: "update",
+                url: ""
+            },
+        ],
+        "Kayfable": [
+            {
+                id: 1,
+                title: 'Build Database',
+                type: "request",
                 url: "/api/kayfable/scrape"
             },
             {
                 id: 2,
-                title: "Higher or Lower",
-                url: "/api/higherorlower/scrape"
+                title: 'Reset Database',
+                type: "request",
+                url: ""
+            },
+            {
+                id: 3,
+                title: 'View Wrestler Database',
+                type: "request",
+                url: ""
+            },
+            {
+                id: 4,
+                title: 'View Gimmick Database',
+                type: "request",
+                url: ""
+            },
+            {
+                id: 5,
+                title: 'View Answer',
+                type: "request",
+                url: ""
+            },
+            {
+                id: 6,
+                title: 'Reset Answer',
+                type: "request",
+                url: ""
             },
         ],
-        Edit: [
-        ],
-        View: [
-        ],
+        "Higher or Lower": [
+            {
+                id: 1,
+                title: "Build Database",
+                type: "request",
+                url: "/api/higherorlower/scrape"
+            },
+            {
+                id: 2,
+                title: "Reset Database",
+                type: "request",
+                url: ""
+            },
+            {
+                id: 3,
+                title: "View Database",
+                type: "request",
+                url: ""
+            },
+        ]
     })
 
     function request(url) {
@@ -73,7 +153,7 @@ function AdminApp() {
                                             {post.title}
                                         </h3>
 
-                                        <a
+                                        <button
                                             onClick={() => request(`${post.url}`)}
                                             className={classNames(
                                                 'absolute inset-0 rounded-md',
