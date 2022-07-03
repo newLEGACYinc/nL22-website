@@ -224,6 +224,12 @@ function KayfableApp() {
         }
     }, [evaluations.length, evaluations]);
 
+
+    useEffect(() => {
+        const favicon = document.getElementById("favicon");
+        document.title = "Kayfable";
+    }, []);
+
     return (
         <div className={`${darkMode && 'dark'}`}>
             <div className="flex flex-col bg-slate-200 dark:bg-slate-700 h-screen w-screen">

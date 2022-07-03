@@ -30,7 +30,7 @@ function Option(props) {
     if (refresh) {
         if (props.cardPos !== 2) {
             setRefresh(false);
-            axios.get('/higherorlower/data').then((res) => {
+            axios.get('/api/higherorlower/data').then((res) => {
                 console.log(res.data);
                 props.refreshCallback();
                 setName(res.data.name);
@@ -43,7 +43,7 @@ function Option(props) {
         } else {
             setRefresh(false);
             setTimeout(() => {
-                axios.get('/higherorlower/data').then((res) => {
+                axios.get('/api/higherorlower/data').then((res) => {
                     console.log(res.data);
                     props.refreshCallback();
                     setName(res.data.name);

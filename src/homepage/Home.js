@@ -17,7 +17,7 @@ function Homepage() {
                 loop={true}
             />
             <div className={styles["Homepage-cont"]}>
-                <h1 className={styles["welcome"]}>WELCOME TO</h1>
+                <h1>WELCOME TO</h1>
                 <img src={logo} className={styles["Homepage-logo"]} alt="logo" onClick={() => setIsPlaying(!isPlaying)} style=
                     {{ animation: isPlaying ? `${styles["Homepage-logo-wobble"]} infinite 5s linear` : '' }} />
             </div>

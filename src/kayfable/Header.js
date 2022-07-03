@@ -77,7 +77,7 @@ function Header(props) {
                                     <ul className='list-disc mx-2 md:mx-8'>
                                         <li className="m-2">You get ten guesses.</li>
                                         <li className="m-2"><span className="bg-green-500 dark:bg-green-800 p-1">Green</span> in any column indicates a match!</li>
-                                        <li className="m-2"><span className="bg-yellow-300 dark:bg-yellow-600 p-1">Yellow</span> in any column indicates 5 years within the number given.</li>
+                                        <li className="m-2"><span className="bg-yellow-300 dark:bg-yellow-600 p-1">Yellow</span> in any column indicates the answer is within a range of 5 of the guess.</li>
                                         <li className="m-2"><span className="bg-orange-400 dark:bg-orange-700 p-1">Orange</span> in any column indicates that there isn't information to compare with.</li>
                                         <li className="m-2">Hard Mode will hide if a guess in a column is higher or lower than the answer.</li>
                                         <li className="m-2">Wrestler data collected from <a href="https://www.cagematch.net" target="_blank" rel="noreferrer">Cagematch</a>.</li>
