@@ -472,8 +472,6 @@ def load_guess(id):
         "weight": result["weight"]
     }
 
-
-@app.route("/api/kayfable/check/<type>")
 def check_kayfable(type):
     string = []
     if type == "database":
