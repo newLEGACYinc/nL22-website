@@ -9,6 +9,7 @@
 /api/Include
 /api/__pycache__
 /api/pyvenv.cfg
+/api/api.ini
 /database
 
 
