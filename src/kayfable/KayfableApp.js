@@ -4,6 +4,7 @@ import { Dialog, Transition } from '@headlessui/react'
 import Header from './Header';
 import axios from "axios";
 import React, { useState, useEffect, Fragment } from "react";
+import { Helmet } from "react-helmet"
 
 function KayfableApp() {
     const [isAppReady, setIsAppReady] = useState(false);
@@ -68,7 +69,9 @@ function KayfableApp() {
             "games_played": 0,
             "games_won": 0,
             "average_attempts": 0,
-            "hard_mode": false
+            "hard_mode": false,
+            "dark_mode": false,
+            "metric_mode": true
         };
     })
 
@@ -88,6 +91,15 @@ function KayfableApp() {
             return local.dark_mode;
         }
         return false;
+    })
+
+    const [metricMode, setMetricMode] = useState(() => {
+        const savedResult = localStorage.getItem("localStats");
+        if (savedResult !== null) {
+            const local = JSON.parse(savedResult);
+            return local.metric_mode;
+        }
+        return true;
     })
 
     const [showModal, setShowModal] = useState(false)
@@ -112,7 +124,8 @@ function KayfableApp() {
                 "games_won": 0,
                 "average_attempts": 0,
                 "hard_mode": false,
-                "dark_mode": false
+                "dark_mode": false,
+                "metric_mode": true
             };
             localStorage.setItem("localStats", JSON.stringify(stats));
             setLocalStats(stats);
@@ -150,6 +163,12 @@ function KayfableApp() {
 
     function toggleDarkMode() {
         setDarkMode(!darkMode)
+    }
+
+    function toggleMetricMode() {
+        if (guesses.length < 1) {
+            setMetricMode(!metricMode)
+        }
     }
 
     function openModal() {
@@ -191,6 +210,13 @@ function KayfableApp() {
     }, [darkMode])
 
     useEffect(() => {
+        let newStats = {
+            ...localStats, "metric_mode": metricMode
+        };
+        setLocalStats(newStats)
+    }, [metricMode])
+
+    useEffect(() => {
         const savedResult = localStorage.getItem("gameState");
         if (savedResult !== null) {
             const gameState = JSON.parse(savedResult)
@@ -224,14 +250,12 @@ function KayfableApp() {
         }
     }, [evaluations.length, evaluations]);
 
-
-    useEffect(() => {
-        const favicon = document.getElementById("favicon");
-        document.title = "Kayfable";
-    }, []);
-
     return (
         <div className={`${darkMode && 'dark'}`}>
+            <Helmet>
+                <title>Kayfable</title>
+                <meta name="description" content="The Wrestler Guessing Game" />
+            </Helmet>
             <div className="flex flex-col bg-slate-200 dark:bg-slate-700 h-screen w-screen">
                 {isAppReady &&
                     <>
@@ -239,9 +263,12 @@ function KayfableApp() {
                             guesses={guesses}
                             hardMode={hardMode}
                             darkMode={darkMode}
+                            metricMode={metricMode}
                             localStats={localStats}
+                            gameStatus={gameStatus}
                             toggleDifficulty={toggleDifficulty}
-                            toggleDarkMode={toggleDarkMode} />
+                            toggleDarkMode={toggleDarkMode}
+                            toggleMetricMode={toggleMetricMode} />
                         <div className="justify-center flex-grow lg:m-auto">
                             <Game
                                 wrestlerList={wrestlerList}
@@ -252,6 +279,7 @@ function KayfableApp() {
                                 evaluations={evaluations}
                                 gameStatus={gameStatus}
                                 hardMode={hardMode}
+                                metricMode={metricMode}
                                 guessCallback={guessCallback}
                                 evaluationsCallback={evaluationsCallback}
                                 stateCallback={stateCallback}

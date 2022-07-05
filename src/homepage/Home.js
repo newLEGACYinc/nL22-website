@@ -1,4 +1,5 @@
-import logo from '../logo.svg';
+
+import { ReactComponent as Logo } from '../logo.svg';
 import styles from './Home.module.css';
 import Sound from 'react-sound';
 import Sick from '../music/Sick.mp3';
@@ -18,8 +19,8 @@ function Homepage() {
             />
             <div className={styles["Homepage-cont"]}>
                 <h1>WELCOME TO</h1>
-                <img src={logo} className={styles["Homepage-logo"]} alt="logo" onClick={() => setIsPlaying(!isPlaying)} style=
-                    {{ animation: isPlaying ? `${styles["Homepage-logo-wobble"]} infinite 5s linear` : '' }} />
+                <Logo fill="white" className={styles["Homepage-logo"]} width="20%" height="20%" onClick={() => setIsPlaying(!isPlaying)} style=
+                    {{ animation: isPlaying ? `${styles["Homepage-logo-wobble"]} infinite 5s linear` : '' }}/>
             </div>
         </div>
     );

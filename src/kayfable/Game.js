@@ -1,4 +1,4 @@
-import React, { useState, useEffect, Fragment } from "react";
+import React, { useState, useEffect, Fragment, useRef } from "react";
 import styles from './KayfableApp.module.css';
 import Guess from './Guess';
 import { Combobox } from '@headlessui/react'
@@ -6,6 +6,7 @@ import { Combobox } from '@headlessui/react'
 function Game(props) {
     const [searchTerm, setSearchTerm] = useState('');
     const [autoComplete, setAutoComplete] = useState([]);
+    const tableEndRef = useRef(null);
 
     useEffect(() => {
         async function searchFunction() {
@@ -186,41 +187,84 @@ function Game(props) {
             if (data.height === "N/A" || result.height === "N/A") {
                 Height = 3
             } else {
-                if (data.height === result.height) {
-                    Height = 1
-                } else if (Math.abs(result.height - data.height) < 6) {
-                    Height = 2
+                if (props.metricMode) {
+                    if (data.height === result.height) {
+                        Height = 1
+                    } else if (Math.abs(result.height - data.height) < 6) {
+                        Height = 2
+                    } else {
+                        Height = 0
+                    }
                 } else {
-                    Height = 0
+                    if (Math.round(data.height / 2.54) === Math.round(result.height / 2.54)) {
+                        Height = 1
+                    } else if (Math.abs(Math.round(result.height / 2.54) - Math.round(data.height / 2.54)) < 4) {
+                        Height = 2
+                    } else {
+                        Height = 0
+                    }
                 }
             }
 
-            if (result.height > data.height) {
-                Height_HOL = 1
-            } else if (result.height < data.height) {
-                Height_HOL = 2
+            if (props.metricMode) {
+                if (result.height > data.height) {
+                    Height_HOL = 1
+                } else if (result.height < data.height) {
+                    Height_HOL = 2
+                } else {
+                    Height_HOL = 0
+                }
             } else {
-                Height_HOL = 0
+                if (Math.round(result.height / 2.54) > Math.round(data.height / 2.54)) {
+                    Height_HOL = 1
+                } else if (Math.round(result.height / 2.54) < Math.round(data.height / 2.54)) {
+                    Height_HOL = 2
+                } else {
+                    Height_HOL = 0
+                }
             }
 
             if (data.weight === "N/A" || result.weight === "N/A") {
                 Weight = 3
             } else {
-                if (data.weight === result.weight) {
-                    Weight = 1
-                } else if (Math.abs(result.weight - data.weight) < 6) {
-                    Weight = 2
+                if (props.metricMode) {
+                    if (data.weight === result.weight) {
+                        Weight = 1
+                    } else if (Math.abs(result.weight - data.weight) < 6) {
+                        Weight = 2
+                    } else {
+                        Weight = 0
+                    }
                 } else {
-                    Weight = 0
+
+                    if (Math.round(data.weight / 0.45359237) === Math.round(result.weight / 0.45359237)) {
+                        Weight = 1
+                    } else if (Math.abs(Math.round(result.weight / 0.45359237) - Math.round(data.weight / 0.45359237)) < 11) {
+                        Weight = 2
+                    } else {
+                        Weight = 0
+                    }
+
                 }
             }
 
-            if (result.weight > data.weight) {
-                Weight_HOL = 1
-            } else if (result.weight < data.weight) {
-                Weight_HOL = 2
+
+            if (props.metricMode) {
+                if (result.weight > data.weight) {
+                    Weight_HOL = 1
+                } else if (result.weight < data.weight) {
+                    Weight_HOL = 2
+                } else {
+                    Weight_HOL = 0
+                }
             } else {
-                Weight_HOL = 0
+                if (Math.round(result.weight / 0.45359237) > Math.round(data.weight / 0.45359237)) {
+                    Weight_HOL = 1
+                } else if (Math.round(result.weight / 0.45359237) < Math.round(data.weight / 0.45359237)) {
+                    Weight_HOL = 2
+                } else {
+                    Weight_HOL = 0
+                }
             }
 
             response = {
@@ -241,9 +285,18 @@ function Game(props) {
         return response;
     };
 
+    function scrollToBottom() {
+        tableEndRef.current?.scrollIntoView({ behavior: "smooth" });
+    }
+
+    useEffect(() => {
+        if (props.guesses.length > 0)
+            scrollToBottom()
+    }, [props.guesses])
+
     return (
         <>
-            <div className="flex flex-col justify-center text-center pt-4 md:pt-8">
+            <div className="flex flex-col justify-center !w-screen text-center pt-4 md:pt-8">
                 <div className='flex justify-center md:mb-4 pb-4'>
                     {props.gameStatus !== "IN PROGRESS" ?
                         <button type="button" onClick={props.toggleModal} className="text-white bg-blue-600 hover:text-white hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-bold rounded-lg text-sm px-5 py-2 text-center">
@@ -255,7 +308,7 @@ function Game(props) {
                                     setSearchTerm('');
                                     match(id);
                                 }}>
-                                    <Combobox.Input placeholder={`Guess ${props.guesses.length + 1} out of 10`}onChange={(event) => setSearchTerm(event.target.value)} className="w-64 md:w-80 border text-center rounded-md md:pl-4 md:pr-4 py-2 focus:border-indigo-600 focus:outline-none focus:shadow-outline" />
+                                    <Combobox.Input placeholder={`Guess ${props.guesses.length + 1} out of 10`} onChange={(event) => setSearchTerm(event.target.value)} className="w-64 md:w-80 border text-center rounded-md md:pl-4 md:pr-4 py-2 focus:border-indigo-600 focus:outline-none focus:shadow-outline" />
                                     {autoComplete.length > 0 && (
                                         <Combobox.Options className='absolute inset-x-0 top-full bg-blue-200 border border-blue-500 rounded-md z-20'>{autoComplete.map((definition, index) => (
                                             <Combobox.Option key={index} value={definition.id} as={Fragment}>
@@ -274,7 +327,7 @@ function Game(props) {
                         </div>
                     }
                 </div>
-                <div id="table-scroll" className={`${styles["kayfable-table"]} !text-sm md:!text-xl !w-full md:!w-4/5`}>
+                <div id="kayfable-table" className={`${styles["kayfable-table"]} mb-5 !text-sm md:!text-xl !w-full md:!w-4/5`}>
                     <table>
                         <thead>
                             <tr>
@@ -283,8 +336,8 @@ function Game(props) {
                                 <th scope="col">Age</th>
                                 <th scope="col">Country of Birth</th>
                                 <th scope="col">Debut Year</th>
-                                <th scope="col">Height (cm)</th>
-                                <th scope="col">Weight (kg)</th>
+                                <th scope="col">Height {props.metricMode ? "(cm)" : "(ft)"}</th>
+                                <th scope="col">Weight {props.metricMode ? "(kg)" : "(lb)"}</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -295,9 +348,11 @@ function Game(props) {
                                         guess={guess}
                                         evaluations={props.evaluations[index]}
                                         hardMode={props.hardMode}
+                                        metricMode={props.metricMode}
                                     />
                                 ))}
                         </tbody>
+                        <div ref={tableEndRef} />
                     </table>
                 </div>
             </div >

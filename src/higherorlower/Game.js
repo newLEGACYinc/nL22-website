@@ -31,7 +31,6 @@ function Option(props) {
         if (props.cardPos !== 2) {
             setRefresh(false);
             axios.get('/api/higherorlower/data').then((res) => {
-                console.log(res.data);
                 props.refreshCallback();
                 setName(res.data.name);
                 setUsername(res.data.username);
@@ -44,7 +43,6 @@ function Option(props) {
             setRefresh(false);
             setTimeout(() => {
                 axios.get('/api/higherorlower/data').then((res) => {
-                    console.log(res.data);
                     props.refreshCallback();
                     setName(res.data.name);
                     setUsername(res.data.username);

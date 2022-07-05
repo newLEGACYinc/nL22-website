@@ -112,7 +112,7 @@ function BarChart(props) {
                 <tbody>
                     <tr>
                         <td>{props.localStats["games_played"]}</td>
-                        <td>{props.localStats["games_played"] > 0 ? (props.localStats["games_won"] / props.localStats["games_played"]) * 100 : 0}%</td>
+                        <td>{props.localStats["games_played"] > 0 ? ((props.localStats["games_won"] / props.localStats["games_played"]) * 100).toFixed(2) : 0}%</td>
                     </tr>
                 </tbody>
             </table>
@@ -130,7 +130,7 @@ function BarChart(props) {
                     </tr>
                 </tbody>
             </table>
-            <div className='w-full h-96 relative'>
+            <div className='hidden md:block relative w-full h-96 '>
                 <Bar options={options} plugins={[ChartDataLabels]} data={dataHorBar} />
             </div>
         </div>
