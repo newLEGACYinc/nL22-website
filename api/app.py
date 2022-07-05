@@ -1,4 +1,4 @@
-from flask import Flask, jsonify
+from flask import Flask, jsonify, abort
 from pymongo import MongoClient
 import tweepy
 from bs4 import BeautifulSoup
@@ -21,7 +21,7 @@ kgimmick = db.kgimmick
 answer = db.answer
 
 twtClient = tweepy.Client(
-    "AAAAAAAAAAAAAAAAAAAAAFIXLwEAAAAAx1uhFm%2BK22glrIwNgFavMMfIq3o%3DkGn4KQg10MehUdIOYP3cxopZfXMxsG6dCeNm1ee67ktpdG2ThB", wait_on_rate_limit=True)
+    "AAAAAAAAAAAAAAAAAAAAAFIXLwEAAAAAx1uhFm%2BK22glrIwNgFavMMfIq3o%3DkGn4KQg10MehUdIOYP3cxopZfXMxsG6dCeNm1ee67ktpdG2ThB")
 
 
 def holscrape():
@@ -117,14 +117,15 @@ def databasedata(type=None, id=None):
         type = random.choice(["promotion", "wrestler"])
     if type == "promotion":
         if id == None:
-            result = list(promotion.aggregate(
-                [{"$sample": {"size": 1}}]))[0]
+            result = list(promotion.aggregate([
+                {"$match": {"followers": {"$gt": 500}}}, {"$sample": {"size": 1}}]))[0]
+
         else:
             result = promotion.find_one({"id": int(id)})
     elif type == "wrestler":
         if id == None:
-            result = list(wrestler.aggregate(
-                [{"$sample": {"size": 1}}]))[0]
+            result = list(wrestler.aggregate([
+                {"$match": {"followers": {"$gt": 500}}}, {"$sample": {"size": 1}}]))[0]
         else:
             result = wrestler.find_one({"id": int(id)})
     return {
@@ -379,13 +380,13 @@ def load_kayfable_valid():
         {"$match": {"$and": [{"birth_date": {"$ne": "N/A"}}, {"debut_year": {"$ne": "N/A"}}, {"height": {"$ne": "N/A"}}, {"weight": {"$ne": "N/A"}}]}}]))
     for record in records:
         result = {
-        "id": record["id"],
-        "name": record["name"],
-        "birth_date": record["birth_date"],
-        "debut_year": record["debut_year"],
-        "height": record["height"],
-        "weight": record["weight"]
-    }
+            "id": record["id"],
+            "name": record["name"],
+            "birth_date": record["birth_date"],
+            "debut_year": record["debut_year"],
+            "height": record["height"],
+            "weight": record["weight"]
+        }
         string.append(result)
     return jsonify(string)
 
@@ -415,6 +416,7 @@ def load_kayfable_answer():
         answer.replace_one(
             {"game_id": id}, {"game_id": id, "id": record["id"]}, upsert=True)
     return result
+
 
 @app.route("/api/kayfable/data")
 def load_kayfable_data():
