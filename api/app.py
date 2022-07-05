@@ -328,11 +328,11 @@ def k_scrape():
                     else:
                         birth_date = "N/A"
                     if cells[4].string is not None:
-                        height = int(cells[4].string)
+                        height = int(float(cells[4].string))
                     else:
                         height = "N/A"
                     if cells[5].string is not None:
-                        weight = int(cells[5].string)
+                        weight = int(float(cells[5].string))
                     else:
                         weight = "N/A"
                     string += f'{wrestler_id} - {cells[1].string.strip()} - {birth_date} - {birth_place} - {debut} - {height} - {weight}</br>'
