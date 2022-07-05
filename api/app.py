@@ -14,6 +14,22 @@ Config.read("api.ini")
 app = Flask(__name__)
 
 dbClient = MongoClient()
+hol = dbClient.hol
+kayfable = dbClient.kayfable
+general = dbClient.general
+
+hol_wrestler = hol.wrestler
+hol_promotion = hol.promotion
+
+kayfable_wrestler = kayfable.wrestler
+kayfable_gimmicks = kayfable.gimmicks
+
+blacklist_wrestler = general.blacklist_wrestler
+whitelist_wrestler = general.whitelist_wrestler
+
+blacklist_promotion = general.blacklist_promotion
+whitelist_promotion = general.whitelist_promotion
+
 db = dbClient.accounts
 wrestler = db.wrestler
 promotion = db.promotion
@@ -22,6 +38,7 @@ p_blacklist = db.pblacklist
 kwrestler = db.kwrestler
 kgimmick = db.kgimmick
 answer = db.answer
+
 
 twtClient = tweepy.Client(
     Config.get('SECRET', 'Twitter'))
@@ -399,8 +416,15 @@ def load_kayfable_answer():
     date = datetime.now()
     id = date.strftime("%Y%m%d")
     if answer.count_documents({"game_id": id}, limit=1) == 0:
-        record = list(kwrestler.aggregate([
-            {"$match": {"$and": [{"birth_date": {"$ne": "N/A"}}, {"debut_year": {"$ne": "N/A"}}, {"height": {"$ne": "N/A"}}, {"weight": {"$ne": "N/A"}}]}}, {"$sample": {"size": 1}}]))[0]
+        while True: 
+            record = list(kwrestler.aggregate([
+                {"$match": {"$and": [{"birth_date": {"$ne": "N/A"}}, {"debut_year": {"$ne": "N/A"}}, {"height": {"$ne": "N/A"}}, {"weight": {"$ne": "N/A"}}]}}, {"$sample": {"size": 1}}]))[0]
+            if answer.count_documents({"id": record["id"]}, limit=1) == 0:
+                answer.replace_one(
+                    {"game_id": id}, {"game_id": id, "id": record["id"]}, upsert=True)
+                break
+            else:
+                continue
     else:
         answer_record = answer.find_one({"game_id": id})
         record = kwrestler.find_one({"id": answer_record["id"]})
@@ -415,9 +439,6 @@ def load_kayfable_answer():
         "height": record["height"],
         "weight": record["weight"]
     }
-    if answer.count_documents({"id": record["id"]}, limit=1) == 0:
-        answer.replace_one(
-            {"game_id": id}, {"game_id": id, "id": record["id"]}, upsert=True)
     return result
 
 
