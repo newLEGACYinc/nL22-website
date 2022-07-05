@@ -5,6 +5,7 @@ import Header from './Header';
 import axios from "axios";
 import React, { useState, useEffect, Fragment } from "react";
 import { Helmet } from "react-helmet"
+import { Toaster } from 'react-hot-toast';
 
 function KayfableApp() {
     const [isAppReady, setIsAppReady] = useState(false);
@@ -334,6 +335,12 @@ function KayfableApp() {
                     </>
                 }
             </div>
+            <Toaster
+                toastOptions={{
+                    className: 'bg-slate-200 text-black dark:bg-slate-700 dark:text-white',
+                }}
+                position="bottom-center"
+                reverseOrder={false} />
         </div>
     )
 }

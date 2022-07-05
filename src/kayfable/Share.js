@@ -1,3 +1,5 @@
+import toast from 'react-hot-toast';
+
 function Share(props) {
 
     function getEvalNumbers(guess) {
@@ -17,20 +19,20 @@ function Share(props) {
             let status = getEvalNumbers(evaluation);
             console.log(status)
             return status.map((value) => {
-                    switch (value) {
-                        case 1:
-                            return '🟩'
-                        case 2:
-                            return '🟨'
-                        case 3:
-                            return '🟧'
-                        case 0:
-                            return '⬜'
-                        default:
-                            return '⬜'
+                switch (value) {
+                    case 1:
+                        return '🟩'
+                    case 2:
+                        return '🟨'
+                    case 3:
+                        return '🟧'
+                    case 0:
+                        return '⬜'
+                    default:
+                        return '⬜'
 
-                    }
-                })
+                }
+            })
                 .join('')
         })
             .join('\n')
@@ -41,7 +43,10 @@ function Share(props) {
     }
 
     function getResultText() {
-        return(
+        toast('Copied to clipboard', {
+            icon: '✅',
+        });
+        return (
             "Kayfable " + getDate(props.answer.game_id) +
             " - " +
             `${props.result === "LOSE" ? 'X' : props.evaluations.length}` +
