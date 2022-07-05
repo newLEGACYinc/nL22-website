@@ -7,7 +7,10 @@ import re
 import random
 from datetime import datetime
 from deep_translator import GoogleTranslator
+import configparser
 
+Config = configparser.ConfigParser()
+Config.read("api.ini")
 app = Flask(__name__)
 
 dbClient = MongoClient()
@@ -21,7 +24,7 @@ kgimmick = db.kgimmick
 answer = db.answer
 
 twtClient = tweepy.Client(
-    "AAAAAAAAAAAAAAAAAAAAAFIXLwEAAAAAx1uhFm%2BK22glrIwNgFavMMfIq3o%3DkGn4KQg10MehUdIOYP3cxopZfXMxsG6dCeNm1ee67ktpdG2ThB")
+    Config.get('SECRET', 'Twitter'))
 
 
 def holscrape():
