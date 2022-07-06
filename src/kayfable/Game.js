@@ -138,21 +138,21 @@ function Game(props) {
                 Gender = 0
             }
 
-            if (data.age === "N/A" || result.age === "N/A") {
+            if (data.birth_year === "N/A" || result.birth_year === "N/A") {
                 Age = 3
             } else {
-                if (data.age === result.age) {
+                if (data.birth_year === result.birth_year) {
                     Age = 1
-                } else if (Math.abs(result.age - data.age) < 6) {
+                } else if (Math.abs(result.birth_year - data.birth_year) < 6) {
                     Age = 2
                 } else {
                     Age = 0
                 }
             }
 
-            if (result.age > data.age) {
+            if (result.birth_year > data.birth_year) {
                 Age_HOL = 1
-            } else if (result.age < data.age) {
+            } else if (result.birth_year < data.birth_year) {
                 Age_HOL = 2
             } else {
                 Age_HOL = 0
@@ -333,7 +333,7 @@ function Game(props) {
                             <tr>
                                 <th scope="col">Name</th>
                                 <th scope="col">Gender</th>
-                                <th scope="col">Age</th>
+                                <th scope="col">Year of Birth</th>
                                 <th scope="col">Country of Birth</th>
                                 <th scope="col">Debut Year</th>
                                 <th scope="col">Height {props.metricMode ? "(cm)" : "(ft)"}</th>

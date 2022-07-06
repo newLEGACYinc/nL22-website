@@ -433,7 +433,7 @@ def load_kayfable_answer():
         "id": record["id"],
         "name": record["name"],
         "gender": record["gender"],
-        "age": calculate_age(record["birth_date"]),
+        "birth_year": parse_birthyear(record["birth_date"]),
         "birth_place": record["birth_place"],
         "debut_year": record["debut_year"],
         "height": record["height"],
@@ -478,6 +478,27 @@ def calculate_age(birth_date):
     except Exception:
         return "N/A"
 
+def parse_birthyear(birth_date):
+    try:
+        if birth_date == "N/A":
+            return "N/A"
+        birth_date = birth_date.split('.')
+        if len(birth_date) == 3:
+            if len(birth_date[2]) < 4:
+                return "N/A"
+            else:
+                year = birth_date[2]
+        elif len(birth_date) == 2:
+            year = birth_date[1]
+        elif len(birth_date) == 1:
+            year = birth_date[0]
+        else:
+            return "N/A"
+        return year
+    except Exception:
+        return "N/A"
+
+
 
 @app.route("/api/kayfable/guess/<id>")
 def load_guess(id):
@@ -486,7 +507,7 @@ def load_guess(id):
         "id": result["id"],
         "name": result["name"],
         "gender": result["gender"],
-        "age": result["birth_date"],
+        "birth_year": result["birth_date"],
         "birth_place": result["birth_place"].strip(),
         "debut_year": result["debut_year"],
         "height": result["height"],
@@ -501,7 +522,7 @@ def check_kayfable(type):
                 "id": x["id"],
                 "name": x["name"],
                 "gender": x["gender"],
-                "age": calculate_age(x["birth_date"]),
+                "birth_year": parse_birthyear(x["birth_date"]),
                 "birth_place": x["birth_place"],
                 "debut_year": x["debut_year"],
                 "height": x["height"],

@@ -22,15 +22,15 @@ function Guess(props) {
                     <td className="!bg-slate-200 text-black dark:!bg-slate-700 dark:text-white ">{props.guess.gender.charAt(0).toUpperCase() + props.guess.gender.slice(1)}</td>
             }
             {props.evaluations.Age === 1 ?
-                <td className='!bg-green-500 dark:!bg-green-800 text-black dark:text-white'>{props.guess.age}</td> : <>{
+                <td className='!bg-green-500 dark:!bg-green-800 text-black dark:text-white'>{props.guess.birth_year}</td> : <>{
                     props.evaluations.Age === 2 ?
                         <td className='!bg-yellow-300 dark:!bg-yellow-600 text-black dark:text-white'>
-                            {props.guess.age} {props.hardMode ? "" : `${props.evaluations.Age_HOL === 1 ? "▲" : props.evaluations.Age_HOL === 2 ? "▼" : ""}`}
+                            {props.guess.birth_year} {props.hardMode ? "" : `${props.evaluations.Age_HOL === 1 ? "▲" : props.evaluations.Age_HOL === 2 ? "▼" : ""}`}
                         </td> :
                         <>{
                             props.evaluations.Age === 3 ?
-                                <td className='!bg-orange-400 dark:!bg-orange-700 text-black dark:text-white'>{props.guess.age}</td> :
-                                <td className="!bg-slate-200 text-black dark:!bg-slate-700 dark:text-white ">{props.guess.age} {props.hardMode ? "" : `${props.evaluations.Age_HOL === 1 ? "▲" : props.evaluations.Age_HOL === 2 ? "▼" : ""}`}</td>
+                                <td className='!bg-orange-400 dark:!bg-orange-700 text-black dark:text-white'>{props.guess.birth_year}</td> :
+                                <td className="!bg-slate-200 text-black dark:!bg-slate-700 dark:text-white ">{props.guess.birth_year} {props.hardMode ? "" : `${props.evaluations.Age_HOL === 1 ? "▲" : props.evaluations.Age_HOL === 2 ? "▼" : ""}`}</td>
                         }</>
                 }</>
             }
