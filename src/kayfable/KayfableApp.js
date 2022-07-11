@@ -12,14 +12,7 @@ function KayfableApp() {
     const [wrestlerList, setWrestlerList] = useState([]);
     const [nameList, setNameList] = useState([]);
 
-    const [gameStatus, setGameStatus] = useState(() => {
-        const savedResult = localStorage.getItem("gameState");
-        if (savedResult !== null) {
-            const gameState = JSON.parse(savedResult);
-            return gameState.game_status;
-        }
-        return "IN PROGRESS";
-    })
+    const [gameStatus, setGameStatus] = useState("IN PROGRESS")
 
     const [guesses, setGuesses] = useState(() => {
         const savedResult = localStorage.getItem("gameState");
