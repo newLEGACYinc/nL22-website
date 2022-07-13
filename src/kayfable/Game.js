@@ -352,8 +352,8 @@ function Game(props) {
                                     />
                                 ))}
                         </tbody>
-                        <div ref={tableEndRef} />
                     </table>
+                    <div ref={tableEndRef} />
                 </div>
             </div >
         </>

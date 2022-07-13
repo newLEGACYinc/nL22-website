@@ -12,7 +12,14 @@ function KayfableApp() {
     const [wrestlerList, setWrestlerList] = useState([]);
     const [nameList, setNameList] = useState([]);
 
-    const [gameStatus, setGameStatus] = useState("IN PROGRESS")
+    const [gameStatus, setGameStatus] = useState(() => {
+        const savedResult = localStorage.getItem("gameState");
+        if (savedResult !== null) {
+            const gameState = JSON.parse(savedResult);
+            return gameState.game_status;
+        }
+        return "IN PROGRESS";
+    })
 
     const [guesses, setGuesses] = useState(() => {
         const savedResult = localStorage.getItem("gameState");
@@ -101,7 +108,6 @@ function KayfableApp() {
     useEffect(() => {
         getData();
         getLocalStats();
-        setIsAppReady(true);
     }, [])
 
     function getLocalStats() {
@@ -145,6 +151,7 @@ function KayfableApp() {
             setWrestlerList(res.data.wrestlers)
             setNameList(res.data.gimmicks)
             setAnswer(res.data.answer)
+            setIsAppReady(true);
         })
 
     }
