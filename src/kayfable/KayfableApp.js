@@ -106,6 +106,9 @@ function KayfableApp() {
     const [showModal, setShowModal] = useState(false)
 
     useEffect(() => {
+        if (showModal) {
+            closeModal();
+        };
         getData();
         getLocalStats();
     }, [])
@@ -151,7 +154,7 @@ function KayfableApp() {
             setWrestlerList(res.data.wrestlers)
             setNameList(res.data.gimmicks)
             setAnswer(res.data.answer)
-            setIsAppReady(true);
+            setIsAppReady(true)
         })
 
     }
@@ -258,18 +261,18 @@ function KayfableApp() {
                 <meta name="description" content="The Wrestler Guessing Game" />
             </Helmet>
             <div className="flex flex-col bg-slate-200 dark:bg-slate-700 h-screen w-screen">
+                <Header
+                    guesses={guesses}
+                    hardMode={hardMode}
+                    darkMode={darkMode}
+                    metricMode={metricMode}
+                    localStats={localStats}
+                    gameStatus={gameStatus}
+                    toggleDifficulty={toggleDifficulty}
+                    toggleDarkMode={toggleDarkMode}
+                    toggleMetricMode={toggleMetricMode} />
                 {isAppReady &&
                     <>
-                        <Header
-                            guesses={guesses}
-                            hardMode={hardMode}
-                            darkMode={darkMode}
-                            metricMode={metricMode}
-                            localStats={localStats}
-                            gameStatus={gameStatus}
-                            toggleDifficulty={toggleDifficulty}
-                            toggleDarkMode={toggleDarkMode}
-                            toggleMetricMode={toggleMetricMode} />
                         <div className="justify-center flex-grow lg:m-auto">
                             <Game
                                 wrestlerList={wrestlerList}
