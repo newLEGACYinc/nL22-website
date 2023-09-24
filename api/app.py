@@ -5,7 +5,6 @@ import time
 import re
 from pymongo import MongoClient
 from bson import json_util
-import json
 
 app = Flask(__name__)
 client = MongoClient("localhost", 27017)
