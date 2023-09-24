@@ -2,10 +2,21 @@
 @tailwind components;
 @tailwind utilities;
 
-body {
-  overflow: hidden;
+a {
+  @apply underline text-blue-600 dark:text-blue-300 hover:text-blue-800 dark:hover:text-blue-400 visited:text-purple-600 dark:visited:text-purple-300;
 }
 
-a {
-  @apply underline text-blue-600 dark:text-blue-300 hover:text-blue-800 dark:hover:text-blue-400 visited:text-purple-600 dark:visited:text-purple-300 
+html, body{
+  height: 100%;
+  margin: 0;
+}
+
+#root{
+  display: flex;
+  flex-flow: column;
+  height: 100%;
+}
+
+.App{
+  flex: 1 1 auto;
 }

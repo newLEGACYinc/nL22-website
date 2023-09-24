@@ -1,18 +1,12 @@
 import './App.css';
 import { Route, Routes } from 'react-router-dom';
-import HoLApp from './higherorlower/HoLApp';
-import Homepage from './homepage/Home';
-import KayfableApp from './kayfable/KayfableApp';
-import AdminApp from './admin/AdminApp';
+import VotingApp from './eoty/VotingApp';
 
 function App() {
   return (
     <div className="App">
       <Routes>
-        <Route exact path="/" element={<Homepage />} />
-        <Route exact path="higherorlower" element={<HoLApp />} />
-        <Route exact path="kayfable" element={<KayfableApp />} />
-        <Route exact path="admin" element={<AdminApp />} />
+        <Route exact path="nL22" element={<VotingApp />} />
       </Routes>
     </div>
   );
