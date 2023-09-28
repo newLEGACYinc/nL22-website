@@ -88,9 +88,23 @@ function SearchBox(props) {
     }
   }
 
+  function getOrdinal(n) {
+    let ord = "th";
+
+    if (n % 10 == 1 && n % 100 != 11) {
+      ord = "st";
+    } else if (n % 10 == 2 && n % 100 != 12) {
+      ord = "nd";
+    } else if (n % 10 == 3 && n % 100 != 13) {
+      ord = "rd";
+    }
+
+    return ord;
+  }
+
   return (
-    <div className="relative m-5">
-      <div className="flex">
+    <div className="relative mx-auto my-5">
+      <div className="flex ml-[-2.5rem]">
         <Combobox
           value={selectedWrestler}
           onChange={(def) => {
@@ -98,16 +112,15 @@ function SearchBox(props) {
             match(def.id);
           }}
         >
-          <Combobox.Label>{props.place}</Combobox.Label>
+          <Combobox.Label className="pl-7 pr-10 mt-2 w-20 ml-2 font-bold text-justify" style={{textShadow: "1px 1px 2px black"}}>{`${
+            props.place
+          }${getOrdinal(props.place)}`}</Combobox.Label>
           <Combobox.Input
             onChange={(event) => setSearchTerm(event.target.value)}
-            className="w-64 md:w-80 border text-center rounded-md md:pl-4 md:pr-4 py-2
-                 focus:border-indigo-600 focus:outline-none focus:shadow-outline"
+            className="w-64 md:w-80 border-2 text-center rounded-md md:pl-4 md:pr-4 py-2
+                 focus:border-indigo-600 focus:outline-none focus:shadow-outline text-black drop-shadow-xl"
           />
-          <Combobox.Options
-            className="absolute inset-x-0 top-full bg-blue-200 border border-blue-500 rounded-md z-20 text-center w-64 md:w-80"
-            style={{ marginLeft: "8px" }}
-          >
+          <Combobox.Options className="absolute inset-x-0 top-full bg-blue-200 border border-blue-500 w-64 md:w-80 text-center rounded z-20 ml-12">
             {autoComplete.map((definition, index) => (
               <Combobox.Option key={index} value={definition}>
                 {({ active }) => (
