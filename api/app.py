@@ -7,10 +7,12 @@ from pymongo import MongoClient
 from bson import json_util
 from celery import Celery
 import os
+from dotenv import load_dotenv
 
 app = Flask(__name__)
 
-login = os.environ.get("rmq_login")
+load_dotenv()
+login = os.environ.get("RMQ_LOGIN")
 
 celery = Celery(
     __name__,
