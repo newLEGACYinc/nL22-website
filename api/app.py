@@ -5,8 +5,20 @@ import time
 import re
 from pymongo import MongoClient
 from bson import json_util
+from celery import Celery
+import os
 
 app = Flask(__name__)
+
+login = os.environ.get("rmq_login")
+
+celery = Celery(
+    __name__,
+    broker=f"amqp://{login}@localhost:5672/",
+    backend=f"rpc://{login}@localhost:5672/",
+    ignore_result=False
+)
+
 client = MongoClient("localhost", 27017)
 db = client["spritepw-test"]
 
@@ -74,12 +86,19 @@ def get_wrestlers(soup, year):
                     "name": wrestler.text.strip(),
                     "gimmicks": gimmicks
                 }
-                collection.update_one({"id": wrestlerData['_id']}, {
+                collection.update_one({"_id": wrestlerData['_id']}, {
                                       '$set': wrestlerData}, upsert=True)
                 print(wrestlerData)
 
 
-@app.route("/api/eoty/scrape")
+@app.route("/api/nL22/scrape/<year>")
+def call_scrape(year):
+    result = scrape.delay(
+        'https://www.cagematch.net/2k16/printversion.php?id=2&view=workers', int(year), False)
+    return {"result_id": result.id}
+
+
+@celery.task
 def scrape(url, year, login_status):
     if login_status is False:
         payload = {'action': 'login', 'referrer': url,
@@ -89,7 +108,7 @@ def scrape(url, year, login_status):
         login_status = setLoginStatus(True)
     else:
         soup = send_get_request(url)
-    get_wrestlers(soup, year)
+    get_wrestlers(soup, int(year))
     pages = soup.select('div.NavigationPartPage > a')
     for page in pages:
         if re.search("^>$", page.text):
@@ -106,13 +125,24 @@ def get_database(year):
     return json_util.dumps(cursor)
 
 
+@app.route("/api/nL22/tasks/<id>")
+def result(id):
+    result = celery.AsyncResult(id)
+    ready = result.ready()
+    return {
+        "ready": ready,
+        "successful": result.successful() if ready else None,
+        "value": result.get() if ready else result.result,
+    }
+
+
 @app.route("/api/nL22/ballot/<year>/<userid>", methods=['GET'])
 @app.route("/api/nL22/ballot/<year>", methods=['POST'], defaults={'userid': None})
 def ballot_op(year, userid):
     if request.method == 'POST':
         collection = db[f"nL22-{year}-ballots-test"]
         collection.update_one({'_id': request.get_json()["_id"]}, {
-                            '$set': request.get_json()}, upsert=True)
+            '$set': request.get_json()}, upsert=True)
         return "Ballot Received"
     elif request.method == 'GET':
         collection = db[f"nL22-{year}-ballots-test"].find_one({'_id': userid})
@@ -139,10 +169,9 @@ def calculate_results(year):
     ranking = results.find().sort('points', -1)
     list = []
     for index, wrestler in enumerate(ranking):
-        list.append(f'{index + 1}. {wrestler["name"]} ({wrestler["points"]} points)')
+        list.append(
+            f'{index + 1}. {wrestler["name"]} ({wrestler["points"]} points)')
     return json_util.dumps(list)
-
-
 
 
 def getLoginStatus():

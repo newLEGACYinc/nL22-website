@@ -3,14 +3,10 @@ import { Helmet } from "react-helmet";
 import SearchBox from "./SearchBox";
 import axios from "axios";
 import axiosRetry from "axios-retry";
-import { DiscordLoginButton, createButton } from "react-social-login-buttons";
-
-const config = {
-  text: "Logout",
-};
+import { DiscordLoginButton } from "react-social-login-buttons";
 
 function VotingApp() {
-  const [nameList, setNameList] = useState([]);
+  const [nameList] = useState([]);
   const [ballot, setBallot] = useState({});
   const [user, setUser] = useState();
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -33,7 +29,7 @@ function VotingApp() {
     var accessToken = localStorage.getItem("discordToken");
     const fragment = new URLSearchParams(window.location.hash.slice(1));
     window.history.replaceState("", document.title, window.location.pathname);
-    if (accessToken == "null") {
+    if (accessToken === "null") {
       localStorage.removeItem("discordToken");
       accessToken = localStorage.getItem("discordToken");
     }
@@ -130,7 +126,6 @@ function VotingApp() {
 
   return (
     <div className="dark h-full">
-      <div className="h-full">
         <Helmet>
           <title>nL 22</title>
         </Helmet>
@@ -144,8 +139,16 @@ function VotingApp() {
           />
           {isLoggedIn && user ? (
             <>
-              <div className="inline-block float-right md:mr-10 mr-5 mt-4 md:mt-0" id="name">
-                <span className="ml-1" style={{textShadow: "1px 1px 2px black"}}>{user.username}</span>
+              <div
+                className="inline-block float-right md:mr-10 mr-5 mt-4 md:mt-0"
+                id="name"
+              >
+                <span
+                  className="ml-1"
+                  style={{ textShadow: "1px 1px 2px black" }}
+                >
+                  {user.username}
+                </span>
                 <DiscordLoginButton
                   className="w-1 h-0.5 md:w-[200px] md:h-[40px]"
                   onClick={logOut}
@@ -170,27 +173,23 @@ function VotingApp() {
         {isLoggedIn ? (
           isLoaded ? (
             <div className="mt-[27%] sm:mt-[25%] md:mt-[5.4rem]">
-              <div className="fixed h-full w-1/4 ml-[787px] bg-[#383d52]"></div>
-              <p className="text-center relative p-5 lg:w-1/4 lg:mx-auto md:p-10 lg:p-20" style={{textShadow: "1px 1px 2px black"}}>
+              <div className="fixed h-full w-1/4 left-1/2 -ml-[12.5%] bg-[#383d52]"></div>
+              <div
+                className="text-center relative p-5 lg:w-1/4 lg:mx-auto md:p-10 lg:p-15"
+                style={{ textShadow: "1px 1px 2px black" }}
+              >
                 <b>
                   <u>Rules</u>
                 </b>
                 <ul>
-                  <li>
-                    You must be a member on the newLEGACYinc discord server to
-                    vote
-                  </li>
-                  <li>
-                    The consideration period is January 4th 2023 - January 4th
-                    2024
-                  </li>
+                  <li>The consideration period is January 4th 2023 to 2024</li>
                   <li>
                     Wrestlers must have competed in at least 10 matches (Unaired
                     house shows do not count towards this)
                   </li>
                   <li>Voting ends January 18th</li>
                 </ul>
-              </p>
+              </div>
               <div className="grid grid-cols-1 gap-2 m-auto justify-center">
                 {Array.apply(null, Array(22)).map((key, index) => (
                   <SearchBox
@@ -227,7 +226,6 @@ function VotingApp() {
             />
           </div>
         )}
-      </div>
     </div>
   );
 }

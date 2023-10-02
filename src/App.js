@@ -1,6 +1,6 @@
 import './App.css';
 import { Route, Routes } from 'react-router-dom';
-import VotingApp from './eoty/VotingApp';
+import VotingApp from './voting/VotingApp';
 
 function App() {
   return (
