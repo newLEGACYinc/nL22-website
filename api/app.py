@@ -8,6 +8,19 @@ from bson import json_util
 from celery import Celery
 import os
 from dotenv import load_dotenv
+import sys
+
+class recursionlimit:
+    def __init__(self, limit):
+        self.limit = limit
+
+    def __enter__(self):
+        self.old_limit = sys.getrecursionlimit()
+        sys.setrecursionlimit(self.limit)
+
+    def __exit__(self, type, value, tb):
+        sys.setrecursionlimit(self.old_limit)
+
 
 app = Flask(__name__)
 
@@ -81,7 +94,7 @@ def get_wrestlers(soup, year):
                             gimmicks.append(gimmick.text.strip())
                         break
 
-                collection = db["nL22-2023-test"]
+                collection = db[f"{year}"]
                 wrestlerData = {
                     "_id": int(re.findall(r'\?id=2&nr=(.+?)(?=\&|$)', url)[0]),
                     "name": wrestler.text.strip(),
@@ -101,27 +114,28 @@ def call_scrape(year):
 
 @celery.task
 def scrape(url, year, login_status):
-    if login_status is False:
-        payload = {'action': 'login', 'referrer': url,
-                   'fUsername': 'Spriter', 'fPassword': 'xeq3A3Mnzq', 'fCookieAgreement': 'yes'}
-        login = "https://www.cagematch.net/?id=872"
-        soup = send_post_request(login, payload)
-    else:
-        soup = send_get_request(url)
-    get_wrestlers(soup, int(year))
-    pages = soup.select('div.NavigationPartPage > a')
-    for page in pages:
-        if re.search("^>$", page.text):
-            next_page = page['href']
-            break
-    if next_page is not None:
-        scrape('https://www.cagematch.net/2k16/printversion.php' +
-               next_page, year, True)
+    with recursionlimit(10000):
+        if login_status is False:
+            payload = {'action': 'login', 'referrer': url,
+                    'fUsername': 'Spriter', 'fPassword': 'xeq3A3Mnzq', 'fCookieAgreement': 'yes'}
+            login = "https://www.cagematch.net/?id=872"
+            soup = send_post_request(login, payload)
+        else:
+            soup = send_get_request(url)
+        get_wrestlers(soup, int(year))
+        pages = soup.select('div.NavigationPartPage > a')
+        for page in pages:
+            if re.search("^>$", page.text):
+                next_page = page['href']
+                break
+        if next_page is not None:
+            scrape('https://www.cagematch.net/2k16/printversion.php' +
+                next_page, year, True)
 
 
 @app.route("/api/nL22/data/<year>")
 def get_database(year):
-    cursor = db[f"nL22-{year}-test"].find()
+    cursor = db[f"{year}"].find()
     return json_util.dumps(cursor)
 
 
@@ -140,12 +154,12 @@ def result(id):
 @app.route("/api/nL22/ballot/<year>", methods=['POST'], defaults={'userid': None})
 def ballot_op(year, userid):
     if request.method == 'POST':
-        collection = db[f"nL22-{year}-ballots-test"]
+        collection = db[f"{year}-ballots"]
         collection.update_one({'_id': request.get_json()["_id"]}, {
             '$set': request.get_json()}, upsert=True)
         return "Ballot Received"
     elif request.method == 'GET':
-        collection = db[f"nL22-{year}-ballots-test"].find_one({'_id': userid})
+        collection = db[f"{year}-ballots"].find_one({'_id': userid})
         if collection:
             return collection
         else:
@@ -154,10 +168,10 @@ def ballot_op(year, userid):
 
 @app.route("/api/nL22/results/<year>")
 def calculate_results(year):
-    wrestlers = db[f"nL22-{year}-test"]
-    results = db[f"nL22-{year}-results"]
+    wrestlers = db[f"{year}"]
+    results = db[f"{year}-results"]
     results.drop()
-    for ballot in db[f"nL22-{year}-ballots-test"].find():
+    for ballot in db[f"{year}-ballots"].find():
         i = 1
         for attribute, value in reversed(ballot.items()):
             if attribute == '_id':
