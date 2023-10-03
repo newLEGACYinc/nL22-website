@@ -13,20 +13,19 @@ app = Flask(__name__)
 
 load_dotenv()
 login = os.environ.get("RMQ_LOGIN")
+rmq_endpoint = os.environ.get("RMQ_ENDPOINT")
 
 celery = Celery(
     __name__,
-    broker=f"amqp://{login}@localhost:5672/",
-    backend=f"rpc://{login}@localhost:5672/",
+    broker=f"amqp://{login}@{rmq_endpoint}",
+    backend=f"rpc://{login}@{rmq_endpoint}",
     ignore_result=False
 )
 
 client = MongoClient("localhost", 27017)
-db = client["spritepw-test"]
+db = client["nL22"]
 
 rate_limit = 0.25
-logged_in = False
-
 
 def send_get_request(url):
     page = requests.get(url, headers={
@@ -107,7 +106,6 @@ def scrape(url, year, login_status):
                    'fUsername': 'Spriter', 'fPassword': 'xeq3A3Mnzq', 'fCookieAgreement': 'yes'}
         login = "https://www.cagematch.net/?id=872"
         soup = send_post_request(login, payload)
-        login_status = setLoginStatus(True)
     else:
         soup = send_get_request(url)
     get_wrestlers(soup, int(year))
@@ -118,7 +116,7 @@ def scrape(url, year, login_status):
             break
     if next_page is not None:
         scrape('https://www.cagematch.net/2k16/printversion.php' +
-               next_page, year, login_status)
+               next_page, year, True)
 
 
 @app.route("/api/nL22/data/<year>")
@@ -174,20 +172,6 @@ def calculate_results(year):
         list.append(
             f'{index + 1}. {wrestler["name"]} ({wrestler["points"]} points)')
     return json_util.dumps(list)
-
-
-def getLoginStatus():
-    return logged_in
-
-
-def setLoginStatus(status):
-    logged_in = status
-    return logged_in
-
-
-# calculate_results(2023)
-# scrape('https://www.cagematch.net/2k16/printversion.php?id=2&view=workers', 2024, logged_in)
-
 
 if __name__ == "__main__":
     app.run(debug=True)
