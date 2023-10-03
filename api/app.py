@@ -30,7 +30,7 @@ rmq_endpoint = os.environ.get("RMQ_ENDPOINT")
 
 celery = Celery(
     __name__,
-    broker=f"amqp://{login}@{rmq_endpoint}",
+    broker=f"amqps://{login}@{rmq_endpoint}",
     backend=f"rpc://{login}@{rmq_endpoint}",
     ignore_result=False
 )
