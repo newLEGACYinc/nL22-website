@@ -128,9 +128,12 @@ def scrape(url, year, login_status):
             if re.search("^>$", page.text):
                 next_page = page['href']
                 break
-        if next_page is not None:
-            scrape('https://www.cagematch.net/2k16/printversion.php' +
-                next_page, year, True)
+        try:
+            if next_page is not None:
+                scrape('https://www.cagematch.net/2k16/printversion.php' +
+                    next_page, year, True)
+        except UnboundLocalError:
+            pass # Last Page so do nothing
 
 
 @app.route("/api/nL22/data/<year>")
