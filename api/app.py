@@ -182,8 +182,10 @@ def calculate_results(year):
             wrestler = wrestlers.find_one({'_id': value})
             results.update_many({'_id': wrestler["_id"]}, {'$set': {'_id': wrestler["_id"], 'name': wrestler["name"]},
                                                            '$inc': {'points': i}}, upsert=True)
+            if int(attribute) == 1:
+                results.update_one({'_id': wrestler["_id"]}, {'$inc': {'first': 1}}, upsert=True)
             i += 1
-    ranking = results.find().sort('points', -1)
+    ranking = sorted(results.find(), key= lambda x: (x['points'], -x['first']))
     list = []
     for index, wrestler in enumerate(ranking):
         list.append(

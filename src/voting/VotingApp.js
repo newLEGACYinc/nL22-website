@@ -251,10 +251,8 @@ function VotingApp() {
                       The consideration period is January 4th {selectedYear.id}{" "}
                       to {selectedYear.id + 1}
                     </li>
-                    <li>
-                      Wrestlers must have competed in at least 10 matches
-                      (Unaired house shows do not count towards this)
-                    </li>
+                    <li>Wrestlers must have competed in at least 10 matches</li>
+                    <li>(Unaired house shows do not count towards this)</li>
                     <li>Voting ends January 18th</li>
                   </ul>
                 </div>
@@ -300,7 +298,7 @@ function VotingApp() {
               className="text-center relative p-5 lg:w-[750px] lg:mx-auto md:p-10 lg:p-15"
               style={{ textShadow: "1px 1px 2px black" }}
             >
-              <h2 className="text-4xl font-bold">{selectedYear.id} Results</h2>
+              <h2 className="text-4xl font-bold">Results</h2>
             </div>
             <img
               className="relative w-full lg:w-auto lg:left-1/2 lg:-ml-[375px]"
