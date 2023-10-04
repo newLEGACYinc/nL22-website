@@ -12,7 +12,7 @@ function VotingApp() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [isLoaded, setisLoaded] = useState(false);
   const oauthURL =
-    "https://discord.com/api/oauth2/authorize?client_id=1153602966708813844&redirect_uri=http%3A%2F%2F127.0.0.1%3A3000%2FnL22&response_type=token&scope=identify%20guilds%20guilds.members.read";
+    "https://discord.com/api/oauth2/authorize?client_id=1153602966708813844&redirect_uri=http%3A%2F%2Flocalhost%2FnL22&response_type=code&scope=guilds%20guilds.members.read%20identify";
 
   axiosRetry(axios, {
     retries: 5, // number of retries
