@@ -13,6 +13,9 @@ const years = [
   { id: 2020 },
   { id: 2019 },
 ];
+const from = new Date();
+const to = new Date("2024-01-18");
+const current = new Date();
 
 function VotingApp() {
   const [nameList] = useState([]);
@@ -89,8 +92,7 @@ function VotingApp() {
   }
 
   useEffect(() => {
-    console.log(new Date().getFullYear());
-    if (selectedYear.id >= parseInt(new Date().getFullYear())) {
+    if (current <= to && current >= from) {
       setIsEnabled(true);
     } else {
       setIsEnabled(false);
@@ -176,7 +178,10 @@ function VotingApp() {
           <>
             <div className="absolute ml-28 -mt-10 md:ml-40 md:-mt-16 text-lg font-bold">
               <Listbox value={selectedYear} onChange={setSelectedYear}>
-                <Listbox.Button className="w-20 text-center">
+                <Listbox.Button
+                  className="w-20 text-center"
+                  style={{ textShadow: "1px 1px 2px black" }}
+                >
                   {selectedYear.id}
                 </Listbox.Button>
                 <Listbox.Options>
@@ -248,12 +253,18 @@ function VotingApp() {
                   </b>
                   <ul>
                     <li>
-                      The consideration period is January 4th {selectedYear.id}{" "}
+                      The consideration period is January 4 {selectedYear.id}{" "}
                       to {selectedYear.id + 1}
                     </li>
                     <li>Wrestlers must have competed in at least 10 matches</li>
                     <li>(Unaired house shows do not count towards this)</li>
-                    <li>Voting ends January 18th</li>
+                    <li>
+                      Voting ends{" "}
+                      {to.toLocaleDateString("default", {
+                        day: "numeric",
+                        month: "long"
+                      })}
+                    </li>
                   </ul>
                 </div>
                 <div className="grid grid-cols-1 gap-2 m-auto justify-center">
@@ -292,6 +303,45 @@ function VotingApp() {
               />
             </div>
           )
+        ) : selectedYear.id >= parseInt(new Date().getFullYear()) ? (
+          <>
+            <div
+              className="text-center relative p-5 lg:w-[750px] lg:mx-auto md:p-10 lg:p-15"
+              style={{ textShadow: "1px 1px 2px black" }}
+            >
+              <h2 className="text-4xl font-bold">
+                Voting has not opened yet.
+                <br />
+                Come back on{" "}
+                {from.toLocaleDateString("default", {
+                  day: "numeric",
+                  month: "long"
+                })}
+              </h2>
+              <br />
+              <b>
+                <u>Rules</u>
+              </b>
+              <ul>
+                <li>
+                  The consideration period is January 4 {selectedYear.id} to{" "}
+                  {selectedYear.id + 1}
+                </li>
+                <li>
+                  Wrestlers must have competed in at least 10 matches
+                  <br />
+                  (Unaired house shows do not count towards this)
+                </li>
+                <li>
+                  Voting ends{" "}
+                  {to.toLocaleDateString("default", {
+                    day: "numeric",
+                    month: "long"
+                  })}
+                </li>
+              </ul>
+            </div>
+          </>
         ) : (
           <>
             <div
