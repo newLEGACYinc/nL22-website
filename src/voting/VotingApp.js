@@ -21,7 +21,7 @@ function VotingApp() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [isLoaded, setisLoaded] = useState(false);
   const oauthURL =
-    "https://discord.com/api/oauth2/authorize?client_id=1153602966708813844&redirect_uri=http%3A%2F%2Flocalhost:3000%2FnL22&response_type=token&scope=guilds%20guilds.members.read%20identify";
+    "https://discord.com/api/oauth2/authorize?client_id=1153602966708813844&redirect_uri=http%3A%2F%2F18.170.37.141%2FnL22&response_type=token&scope=guilds%20guilds.members.read%20identify";
   const [selectedYear, setSelectedYear] = useState(years[0]);
   const [isEnabled, setIsEnabled] = useState(false);
 
@@ -263,17 +263,17 @@ function VotingApp() {
                 </div>
               </>
             ) : (
-              <p
-                className="absolute z-[999] mt-[27%] sm:mt-[25%] md:mt-[5.4rem] font-bold"
+              <div
+                className="text-center relative p-5 lg:w-[750px] lg:mx-auto md:p-10 lg:p-15"
                 style={{ textShadow: "1px 1px 2px black" }}
               >
-                Connecting to Discord API...
-              </p>
+                <p>Connecting to Discord API...</p>
+              </div>
             )
           ) : (
             <div className="flex items-center justify-center h-screen bg-discord-gray text-white">
               <DiscordLoginButton
-                style={{ position: "absolute", width: "75vw" }}
+                style={{ position: "absolute", width: "25vw" }}
                 onClick={() => (window.location.href = oauthURL)}
               />
             </div>
