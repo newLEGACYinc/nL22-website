@@ -32,7 +32,12 @@ function VotingApp() {
       return error.response.data["retry_after"] * 1000;
     },
     retryCondition: (error) => {
-      return error.response.status === 429;
+      switch (error.response.status) {
+        case 429:
+          return true;
+        default:
+          return false;
+      }
     },
   });
 
@@ -120,7 +125,18 @@ function VotingApp() {
       })
       .catch(function (error) {
         console.log(error);
-        alert("Failed to connect to the Discord API, please try again later");
+        console.log(error.response.data["code"]);
+        if (error.response.data["code"] === 10004) {
+          if (
+            window.confirm(
+              "You must be a member of the newLEGACYinc Discord Server to vote. Press OK to join."
+            )
+          ) {
+            window.open("https://www.discord.gg/newlegacyinc", "joinDiscord");
+          }
+        } else {
+          alert("Failed to connect to the Discord API, please try again later");
+        }
         return logOut();
       });
   }
@@ -284,7 +300,7 @@ function VotingApp() {
               className="text-center relative p-5 lg:w-[750px] lg:mx-auto md:p-10 lg:p-15"
               style={{ textShadow: "1px 1px 2px black" }}
             >
-              <h2 class="text-4xl font-bold">{selectedYear.id} Results</h2>
+              <h2 className="text-4xl font-bold">{selectedYear.id} Results</h2>
             </div>
             <img
               className="relative w-full lg:w-auto lg:left-1/2 lg:-ml-[375px]"
