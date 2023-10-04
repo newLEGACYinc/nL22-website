@@ -66,7 +66,7 @@ def get_matches(href, targetYear, type):
         'tr.TRow1 > td:nth-of-type(2), tr.TRow2 > td:nth-of-type(2)')
     total = 0
     for idx, year in enumerate(years):
-        if year.text == str(targetYear) or year.text == str(targetYear - 1):
+        if year.text == str(targetYear) or year.text == str(targetYear + 1):
             total += int(soup.select(
                 'tr.TRow1 > td:nth-of-type(3), tr.TRow2 > td:nth-of-type(3)')[idx].text)
         elif int(year.text) < (targetYear - 1):
