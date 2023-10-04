@@ -10,6 +10,7 @@ import os
 from dotenv import load_dotenv
 import sys
 
+
 class recursionlimit:
     def __init__(self, limit):
         self.limit = limit
@@ -39,6 +40,7 @@ client = MongoClient("localhost", 27017)
 db = client["nL22"]
 
 rate_limit = 0.25
+
 
 def send_get_request(url):
     page = requests.get(url, headers={
@@ -117,7 +119,7 @@ def scrape(url, year, login_status):
     with recursionlimit(10000):
         if login_status is False:
             payload = {'action': 'login', 'referrer': url,
-                    'fUsername': 'Spriter', 'fPassword': 'xeq3A3Mnzq', 'fCookieAgreement': 'yes'}
+                       'fUsername': 'Spriter', 'fPassword': 'xeq3A3Mnzq', 'fCookieAgreement': 'yes'}
             login = "https://www.cagematch.net/?id=872"
             soup = send_post_request(login, payload)
         else:
@@ -131,9 +133,9 @@ def scrape(url, year, login_status):
         try:
             if next_page is not None:
                 scrape('https://www.cagematch.net/2k16/printversion.php' +
-                    next_page, year, True)
+                       next_page, year, True)
         except UnboundLocalError:
-            pass # Last Page so do nothing
+            pass  # Last Page so do nothing
 
 
 @app.route("/api/nL22/data/<year>")
@@ -180,17 +182,20 @@ def calculate_results(year):
             if attribute == '_id':
                 continue
             wrestler = wrestlers.find_one({'_id': value})
-            results.update_many({'_id': wrestler["_id"]}, {'$set': {'_id': wrestler["_id"], 'name': wrestler["name"]},
-                                                           '$inc': {'points': i}}, upsert=True)
-            if int(attribute) == 1:
-                results.update_one({'_id': wrestler["_id"]}, {'$inc': {'first': 1}}, upsert=True)
+            if attribute == '1':
+                results.update_many({'_id': wrestler["_id"]}, {'$set': {'_id': wrestler["_id"], 'name': wrestler["name"]},
+                                                               '$inc': {'points': i, 'first': 1}}, upsert=True)
+            else:
+                results.update_many({'_id': wrestler["_id"]}, {'$set': {'_id': wrestler["_id"], 'name': wrestler["name"]},
+                                                               '$inc': {'points': i, 'first': 0}}, upsert=True)
             i += 1
-    ranking = sorted(results.find(), key= lambda x: (x['points'], -x['first']))
+    ranking = sorted(results.find(), key=lambda x: (-x['points'], -x['first']))
     list = []
     for index, wrestler in enumerate(ranking):
         list.append(
-            f'{index + 1}. {wrestler["name"]} ({wrestler["points"]} points)')
+            f'{index + 1}. {wrestler["name"]} ({wrestler["points"]} points) (1st Place: {wrestler["first"]})')
     return json_util.dumps(list)
+
 
 if __name__ == "__main__":
     app.run(debug=True)
