@@ -132,7 +132,9 @@ function VotingApp() {
       } else {
         if (i === 22) {
           axios.post(`/api/nL22/ballot/${selectedYear.id}`, ballot);
-          alert(`Ballot sent, thank you for voting in the ${selectedYear.id} nL 22.`);
+          alert(
+            `Ballot sent, thank you for voting in the ${selectedYear.id} nL 22.`
+          );
         }
       }
     }
@@ -157,12 +159,10 @@ function VotingApp() {
         {isLoggedIn && user ? (
           <>
             <div className="absolute ml-28 -mt-10 md:ml-40 md:-mt-16 text-lg font-bold">
-              <Listbox
-                value={selectedYear}
-                onChange={setSelectedYear}
-              >
-                <Listbox.Button 
-                className="w-20 text-center">{selectedYear.id}</Listbox.Button>
+              <Listbox value={selectedYear} onChange={setSelectedYear}>
+                <Listbox.Button className="w-20 text-center">
+                  {selectedYear.id}
+                </Listbox.Button>
                 <Listbox.Options>
                   {years.map((year) => (
                     <Listbox.Option key={year.id} value={year} as={Fragment}>
@@ -217,81 +217,82 @@ function VotingApp() {
         className="mix-blend-overlay fixed object-contain h-full md:h-max md:w-full hidden lg:block"
         src="../images/DSC_9292.png"
       ></img>
-      {isEnabled ? (
-        isLoggedIn ? (
-          isLoaded ? (
-            <div className="mt-[27%] sm:mt-[25%] md:mt-[5.4rem]">
-              <div className="fixed h-full w-[750px] left-1/2 -ml-[375px] bg-[#383d52]"></div>
-              <div
-                className="text-center relative p-5 lg:w-[750px] lg:mx-auto md:p-10 lg:p-15"
+      <div className="mt-[27%] sm:mt-[25%] md:mt-[5.4rem]">
+        <div className="fixed h-full w-[750px] left-1/2 -ml-[375px] bg-[#383d52]"></div>
+        {isEnabled ? (
+          isLoggedIn ? (
+            isLoaded ? (
+              <>
+                <div
+                  className="text-center relative p-5 lg:w-[750px] lg:mx-auto md:p-10 lg:p-15"
+                  style={{ textShadow: "1px 1px 2px black" }}
+                >
+                  <b>
+                    <u>Rules</u>
+                  </b>
+                  <ul>
+                    <li>
+                      The consideration period is January 4th {selectedYear.id}{" "}
+                      to {selectedYear.id + 1}
+                    </li>
+                    <li>
+                      Wrestlers must have competed in at least 10 matches
+                      (Unaired house shows do not count towards this)
+                    </li>
+                    <li>Voting ends January 18th</li>
+                  </ul>
+                </div>
+                <div className="grid grid-cols-1 gap-2 m-auto justify-center">
+                  {Array.apply(null, Array(22)).map((key, index) => (
+                    <SearchBox
+                      key={index}
+                      selectedWrestler={ballot[(index + 1).toString()]}
+                      nameList={nameList}
+                      updateBallot={updateBallot}
+                      ballot={ballot}
+                      place={(index + 1).toString()}
+                    />
+                  ))}
+                  <button
+                    type="button"
+                    className="text-white bg-[#e85b50] hover:text-white hover:bg-[#5d2420] focus:ring-4 focus:ring-blue-300 font-bold rounded-lg w-[383px] text-sm px-5 py-2 text-center relative mx-auto my-5"
+                    onClick={validateBallot}
+                  >
+                    <span>Submit</span>
+                  </button>
+                </div>
+              </>
+            ) : (
+              <p
+                className="absolute z-[999] mt-[27%] sm:mt-[25%] md:mt-[5.4rem] font-bold"
                 style={{ textShadow: "1px 1px 2px black" }}
               >
-                <b>
-                  <u>Rules</u>
-                </b>
-                <ul>
-                  <li>
-                    The consideration period is January 4th {selectedYear.id} to{" "}
-                    {selectedYear.id + 1}
-                  </li>
-                  <li>
-                    Wrestlers must have competed in at least 10 matches (Unaired
-                    house shows do not count towards this)
-                  </li>
-                  <li>Voting ends January 18th</li>
-                </ul>
-              </div>
-              <div className="grid grid-cols-1 gap-2 m-auto justify-center">
-                {Array.apply(null, Array(22)).map((key, index) => (
-                  <SearchBox
-                    key={index}
-                    selectedWrestler={ballot[(index + 1).toString()]}
-                    nameList={nameList}
-                    updateBallot={updateBallot}
-                    ballot={ballot}
-                    place={(index + 1).toString()}
-                  />
-                ))}
-                <button
-                  type="button"
-                  className="text-white bg-[#e85b50] hover:text-white hover:bg-[#5d2420] focus:ring-4 focus:ring-blue-300 font-bold rounded-lg w-[383px] text-sm px-5 py-2 text-center relative mx-auto my-5"
-                  onClick={validateBallot}
-                >
-                  <span>Submit</span>
-                </button>
-              </div>
-            </div>
+                Connecting to Discord API...
+              </p>
+            )
           ) : (
-            <p
-              className="absolute z-[999] mt-[27%] sm:mt-[25%] md:mt-[5.4rem] font-bold"
-              style={{ textShadow: "1px 1px 2px black" }}
-            >
-              Connecting to Discord API...
-            </p>
+            <div className="flex items-center justify-center h-screen bg-discord-gray text-white">
+              <DiscordLoginButton
+                style={{ position: "absolute", width: "75vw" }}
+                onClick={() => (window.location.href = oauthURL)}
+              />
+            </div>
           )
         ) : (
-          <div className="flex items-center justify-center h-screen bg-discord-gray text-white">
-            <DiscordLoginButton
-              style={{ position: "absolute", width: "75vw" }}
-              onClick={() => (window.location.href = oauthURL)}
-            />
-          </div>
-        )
-      ) : (
-        <div className="mt-[27%] sm:mt-[25%] md:mt-[5.4rem]">
-          <div className="fixed h-full w-[750px] left-1/2 -ml-[375px] bg-[#383d52]"></div>
-          <div
-            className="text-center relative p-5 lg:w-[750px] lg:mx-auto md:p-10 lg:p-15"
-            style={{ textShadow: "1px 1px 2px black" }}
-          >
-            <h2 class="text-4xl font-bold">{selectedYear.id} Results</h2>
-          </div>
-          <img
-            className="relative w-full lg:w-auto lg:left-1/2 lg:-ml-[375px]"
-            src={`../images/${selectedYear.id}.png`}
-          ></img>
-        </div>
-      )}
+          <>
+            <div
+              className="text-center relative p-5 lg:w-[750px] lg:mx-auto md:p-10 lg:p-15"
+              style={{ textShadow: "1px 1px 2px black" }}
+            >
+              <h2 class="text-4xl font-bold">{selectedYear.id} Results</h2>
+            </div>
+            <img
+              className="relative w-full lg:w-auto lg:left-1/2 lg:-ml-[375px]"
+              src={`../images/${selectedYear.id}.png`}
+            ></img>
+          </>
+        )}
+      </div>
     </div>
   );
 }
