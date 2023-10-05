@@ -91,7 +91,7 @@ function VotingApp() {
   }
 
   useEffect(() => {
-    if (current <= to && current >= from) {
+    if (current <= to && current >= from && selectedYear.id >= parseInt(new Date().getFullYear())) {
       setIsEnabled(true);
     } else {
       setIsEnabled(false);
@@ -299,7 +299,7 @@ function VotingApp() {
               />
             </div>
           )
-        ) : selectedYear.id >= parseInt(new Date().getFullYear()) ? (
+        ) : isEnabled ? (
           <>
             <div
               className="text-center relative p-5 lg:w-[750px] lg:mx-auto md:p-10 lg:p-15"
