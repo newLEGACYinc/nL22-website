@@ -310,13 +310,13 @@ function VotingApp() {
                     https://www.discord.gg/newlegacyinc
                   </a>
                 </p>
-                <div className="flex items-center justify-center h-1/2 bg-discord-gray text-white">
+              </div>
+                <div className="flex items-center justify-center h-[75vh] bg-discord-gray text-white">
                   <DiscordLoginButton
                     style={{ position: "absolute", width: "25vw" }}
                     onClick={() => (window.location.href = oauthURL)}
                   />
                 </div>
-              </div>
             </>
           )
         ) : isEnabled ? (
