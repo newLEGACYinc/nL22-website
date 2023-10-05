@@ -1,5 +1,4 @@
 import React, { useState, useEffect, Fragment } from "react";
-import { Helmet } from "react-helmet";
 import SearchBox from "./SearchBox";
 import axios from "axios";
 import axiosRetry from "axios-retry";
@@ -166,9 +165,6 @@ function VotingApp() {
 
   return (
     <div className="dark h-full">
-      <Helmet>
-        <title>nL 22</title>
-      </Helmet>
       <div className="header drop-shadow-md h-[13%] sm:h-[10%] md:h-[5.4rem]">
         <img
           className="inline-block ml-5 drop-shadow-md mt-7 md:mt-[-5px] md:p-[10px] w-[100px] md:w-[150px]"
