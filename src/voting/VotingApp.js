@@ -257,7 +257,7 @@ function VotingApp() {
                       {selectedYear.id + 1}
                     </li>
                     <li>Wrestlers must have competed in at least 10 matches</li>
-                    <li>(Unaired house shows do not count towards this)</li>
+                    <li>(These matches must have aired)</li>
                     <li>
                       Voting ends January 18
                     </li>
@@ -338,7 +338,7 @@ function VotingApp() {
                 <li>
                   Wrestlers must have competed in at least 10 matches
                   <br />
-                  (Unaired house shows do not count towards this)
+                  (These matches must have aired)
                 </li>
                 <li>
                   Voting ends January 18
