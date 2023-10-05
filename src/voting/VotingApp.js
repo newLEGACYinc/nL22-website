@@ -301,14 +301,21 @@ function VotingApp() {
                 className="text-center relative p-5 lg:w-[750px] lg:mx-auto md:p-10 lg:p-15"
                 style={{ textShadow: "1px 1px 2px black" }}
               >
-                <p>You must be a member of the newLEGACYinc Discord Server to vote.</p>
-                <p><a href="https://www.discord.gg/newlegacyinc">https://www.discord.gg/newlegacyinc</a></p>
-              </div>
-              <div className="flex items-center justify-center h-screen bg-discord-gray text-white">
-                <DiscordLoginButton
-                  style={{ position: "absolute", width: "25vw" }}
-                  onClick={() => (window.location.href = oauthURL)}
-                />
+                <p>
+                  You must be a member of the newLEGACYinc Discord Server to
+                  vote.
+                </p>
+                <p>
+                  <a href="https://www.discord.gg/newlegacyinc">
+                    https://www.discord.gg/newlegacyinc
+                  </a>
+                </p>
+                <div className="flex items-center justify-center h-1/2 bg-discord-gray text-white">
+                  <DiscordLoginButton
+                    style={{ position: "absolute", width: "25vw" }}
+                    onClick={() => (window.location.href = oauthURL)}
+                  />
+                </div>
               </div>
             </>
           )
