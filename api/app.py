@@ -60,13 +60,10 @@ def send_post_request(url, payload):
 
 
 def check_member(id):
-    response = requests.post(f'https://discord.com/api/guilds/139833084722806784/members/{id}', headers={
-                             'Authorization': f'Bot {bot_token}'})
+    response = requests.get(f'https://discord.com/api/guilds/139833084722806784/members/{id}', headers={
+        'Authorization': f'Bot {bot_token}'})
     time.sleep(rate_limit)
-    if response.status_code == 200:
-        return True
-    else:
-        return False
+    return response.status_code
 
 
 def get_matches(href, targetYear, type):
@@ -189,13 +186,11 @@ def calculate_results(year):
     results.drop()
     for ballot in db[f"{year}-ballots"].find():
         i = 1
+        if check_member(ballot["_id"]) == 404:
+            continue
         for attribute, value in reversed(ballot.items()):
             if attribute == '_id':
-                valid = check_member(value)
-                if valid:
-                    continue
-                else:
-                    break
+                continue
             wrestler = wrestlers.find_one({'_id': value})
             if attribute == '1':
                 results.update_many({'_id': wrestler["_id"]}, {'$set': {'_id': wrestler["_id"], 'name': wrestler["name"]},
