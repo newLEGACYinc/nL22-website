@@ -91,7 +91,11 @@ function VotingApp() {
   }
 
   useEffect(() => {
-    if (current <= to && current >= from && selectedYear.id >= parseInt(new Date().getFullYear())) {
+    if (
+      current <= to &&
+      current >= from &&
+      selectedYear.id >= parseInt(new Date().getFullYear())
+    ) {
       setIsEnabled(true);
     } else {
       setIsEnabled(false);
@@ -249,8 +253,8 @@ function VotingApp() {
                   </b>
                   <ul>
                     <li>
-                      The consideration period is January 4 {selectedYear.id}{" "}
-                      to {selectedYear.id + 1}
+                      The consideration period is January 4 {selectedYear.id} to{" "}
+                      {selectedYear.id + 1}
                     </li>
                     <li>Wrestlers must have competed in at least 10 matches</li>
                     <li>(Unaired house shows do not count towards this)</li>
@@ -258,7 +262,7 @@ function VotingApp() {
                       Voting ends{" "}
                       {to.toLocaleDateString("default", {
                         day: "numeric",
-                        month: "long"
+                        month: "long",
                       })}
                     </li>
                   </ul>
@@ -292,12 +296,21 @@ function VotingApp() {
               </div>
             )
           ) : (
-            <div className="flex items-center justify-center h-screen bg-discord-gray text-white">
-              <DiscordLoginButton
-                style={{ position: "absolute", width: "25vw" }}
-                onClick={() => (window.location.href = oauthURL)}
-              />
-            </div>
+            <>
+              <div
+                className="text-center relative p-5 lg:w-[750px] lg:mx-auto md:p-10 lg:p-15"
+                style={{ textShadow: "1px 1px 2px black" }}
+              >
+                <p>You must be a member of the newLEGACYinc Discord Server to vote.</p>
+                <p><a href="https://www.discord.gg/newlegacyinc">https://www.discord.gg/newlegacyinc</a></p>
+              </div>
+              <div className="flex items-center justify-center h-screen bg-discord-gray text-white">
+                <DiscordLoginButton
+                  style={{ position: "absolute", width: "25vw" }}
+                  onClick={() => (window.location.href = oauthURL)}
+                />
+              </div>
+            </>
           )
         ) : isEnabled ? (
           <>
@@ -311,7 +324,7 @@ function VotingApp() {
                 Come back on{" "}
                 {from.toLocaleDateString("default", {
                   day: "numeric",
-                  month: "long"
+                  month: "long",
                 })}
               </h2>
               <br />
@@ -332,7 +345,7 @@ function VotingApp() {
                   Voting ends{" "}
                   {to.toLocaleDateString("default", {
                     day: "numeric",
-                    month: "long"
+                    month: "long",
                   })}
                 </li>
               </ul>
