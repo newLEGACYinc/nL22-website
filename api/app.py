@@ -28,6 +28,7 @@ app = Flask(__name__)
 load_dotenv()
 login = os.environ.get("RMQ_LOGIN")
 rmq_endpoint = os.environ.get("RMQ_ENDPOINT")
+bot_token = os.environ.get("BOT_TOKEN")
 
 celery = Celery(
     __name__,
@@ -56,6 +57,16 @@ def send_post_request(url, payload):
     time.sleep(rate_limit)
     page.encoding = 'utf-8'
     return BeautifulSoup(page.content, "html5lib")
+
+
+def check_member(id):
+    response = requests.post(f'https://discord.com/api/guilds/139833084722806784/members/{id}', headers={
+                             'Authorization': f'Bot {bot_token}'})
+    time.sleep(rate_limit)
+    if response.status_code == 200:
+        return True
+    else:
+        return False
 
 
 def get_matches(href, targetYear, type):
@@ -180,7 +191,11 @@ def calculate_results(year):
         i = 1
         for attribute, value in reversed(ballot.items()):
             if attribute == '_id':
-                continue
+                valid = check_member(value)
+                if valid:
+                    continue
+                else:
+                    break
             wrestler = wrestlers.find_one({'_id': value})
             if attribute == '1':
                 results.update_many({'_id': wrestler["_id"]}, {'$set': {'_id': wrestler["_id"], 'name': wrestler["name"]},
