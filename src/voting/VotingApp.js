@@ -150,7 +150,7 @@ function VotingApp() {
         if (i === 22) {
           axios.post(`/api/nL22/ballot/${selectedYear.id}`, ballot);
           alert(
-            `Ballot sent, thank you for voting in the ${selectedYear.id} nL 22.`
+            `Ballot sent, thank you for voting in the ${selectedYear.id} nL 22. You can still edit your ballot and resend it if you want to make any changes.`
           );
         }
       }
