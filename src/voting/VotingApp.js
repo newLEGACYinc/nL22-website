@@ -261,8 +261,8 @@ function VotingApp() {
                     <li>
                       Voting ends{" "}
                       {to.toLocaleDateString("default", {
-                        day: "numeric",
                         month: "long",
+                        day: "numeric",
                       })}
                     </li>
                   </ul>
@@ -311,12 +311,12 @@ function VotingApp() {
                   </a>
                 </p>
               </div>
-                <div className="flex items-center justify-center bg-discord-gray text-white">
-                  <DiscordLoginButton
-                    style={{ position: "absolute", width: "25vw" }}
-                    onClick={() => (window.location.href = oauthURL)}
-                  />
-                </div>
+              <div className="flex items-center justify-center bg-discord-gray text-white">
+                <DiscordLoginButton
+                  style={{ position: "absolute", width: "25vw" }}
+                  onClick={() => (window.location.href = oauthURL)}
+                />
+              </div>
             </>
           )
         ) : isEnabled ? (
@@ -330,8 +330,8 @@ function VotingApp() {
                 <br />
                 Come back on{" "}
                 {from.toLocaleDateString("default", {
-                  day: "numeric",
                   month: "long",
+                  day: "numeric",
                 })}
               </h2>
               <br />
@@ -351,8 +351,8 @@ function VotingApp() {
                 <li>
                   Voting ends{" "}
                   {to.toLocaleDateString("default", {
-                    day: "numeric",
                     month: "long",
+                    day: "numeric",
                   })}
                 </li>
               </ul>
