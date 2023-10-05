@@ -186,7 +186,7 @@ def calculate_results(year):
     results.drop()
     for ballot in db[f"{year}-ballots"].find():
         i = 1
-        if check_member(ballot["_id"]) == 404:
+        if check_member(ballot["_id"]) != 200:
             continue
         for attribute, value in reversed(ballot.items()):
             if attribute == '_id':
