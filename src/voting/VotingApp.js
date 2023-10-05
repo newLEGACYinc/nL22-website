@@ -259,11 +259,7 @@ function VotingApp() {
                     <li>Wrestlers must have competed in at least 10 matches</li>
                     <li>(Unaired house shows do not count towards this)</li>
                     <li>
-                      Voting ends{" "}
-                      {to.toLocaleDateString("default", {
-                        month: "long",
-                        day: "numeric",
-                      })}
+                      Voting ends January 18
                     </li>
                   </ul>
                 </div>
@@ -328,11 +324,7 @@ function VotingApp() {
               <h2 className="text-4xl font-bold">
                 Voting has not opened yet.
                 <br />
-                Come back on{" "}
-                {from.toLocaleDateString("default", {
-                  month: "long",
-                  day: "numeric",
-                })}
+                Come back on January 5
               </h2>
               <br />
               <b>
@@ -349,11 +341,7 @@ function VotingApp() {
                   (Unaired house shows do not count towards this)
                 </li>
                 <li>
-                  Voting ends{" "}
-                  {to.toLocaleDateString("default", {
-                    month: "long",
-                    day: "numeric",
-                  })}
+                  Voting ends January 18
                 </li>
               </ul>
             </div>
