@@ -184,6 +184,7 @@ def calculate_results(year):
     wrestlers = db[f"{year}"]
     results = db[f"{year}-results"]
     results.drop()
+    valid = 0
     for ballot in db[f"{year}-ballots"].find():
         i = 1
         if check_member(ballot["_id"]) != 200:
@@ -199,12 +200,13 @@ def calculate_results(year):
                 results.update_many({'_id': wrestler["_id"]}, {'$set': {'_id': wrestler["_id"], 'name': wrestler["name"]},
                                                                '$inc': {'points': i, 'first': 0}}, upsert=True)
             i += 1
+        valid += 1
     ranking = sorted(results.find(), key=lambda x: (-x['points'], -x['first']))
     list = []
     for index, wrestler in enumerate(ranking):
         list.append(
             f'{index + 1}. {wrestler["name"]} ({wrestler["points"]} points) (1st Place: {wrestler["first"]})')
-    return json_util.dumps(list)
+    return f'{json_util.dumps(list)}\nTotal valid ballots: {valid}'
 
 
 if __name__ == "__main__":
