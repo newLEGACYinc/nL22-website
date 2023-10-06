@@ -29,6 +29,8 @@ load_dotenv()
 login = os.environ.get("RMQ_LOGIN")
 rmq_endpoint = os.environ.get("RMQ_ENDPOINT")
 bot_token = os.environ.get("BOT_TOKEN")
+cagematch_username = os.environ.get("CAGEMATCH_USERNAME")
+cagematch_password = os.environ.get("CAGEMATCH_PASSWORD")
 
 celery = Celery(
     __name__,
@@ -127,7 +129,7 @@ def scrape(url, year, login_status):
     with recursionlimit(10000):
         if login_status is False:
             payload = {'action': 'login', 'referrer': url,
-                       'fUsername': 'Spriter', 'fPassword': 'xeq3A3Mnzq', 'fCookieAgreement': 'yes'}
+                       'fUsername': cagematch_username, 'fPassword': cagematch_password, 'fCookieAgreement': 'yes'}
             login = "https://www.cagematch.net/?id=872"
             soup = send_post_request(login, payload)
         else:
