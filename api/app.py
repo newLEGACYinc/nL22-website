@@ -8,20 +8,6 @@ from bson import json_util
 from celery import Celery
 import os
 from dotenv import load_dotenv
-import sys
-
-
-class recursionlimit:
-    def __init__(self, limit):
-        self.limit = limit
-
-    def __enter__(self):
-        self.old_limit = sys.getrecursionlimit()
-        sys.setrecursionlimit(self.limit)
-
-    def __exit__(self, type, value, tb):
-        sys.setrecursionlimit(self.old_limit)
-
 
 app = Flask(__name__)
 
@@ -126,26 +112,23 @@ def call_scrape(year):
 
 @celery.task
 def scrape(url, year, login_status):
-    with recursionlimit(10000):
+    while url != '':
         if login_status is False:
             payload = {'action': 'login', 'referrer': url,
                        'fUsername': cagematch_username, 'fPassword': cagematch_password, 'fCookieAgreement': 'yes'}
             login = "https://www.cagematch.net/?id=872"
             soup = send_post_request(login, payload)
+            login_status = True
         else:
             soup = send_get_request(url)
         get_wrestlers(soup, int(year))
         pages = soup.select('div.NavigationPartPage > a')
         for page in pages:
             if re.search("^>$", page.text):
-                next_page = page['href']
+                url = page['href']
                 break
-        try:
-            if next_page is not None:
-                scrape('https://www.cagematch.net/2k16/printversion.php' +
-                       next_page, year, True)
-        except UnboundLocalError:
-            pass  # Last Page so do nothing
+            else:
+                url = ''
 
 
 @app.route("/api/nL22/data/<year>")
