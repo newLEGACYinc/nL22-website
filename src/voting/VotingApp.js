@@ -12,7 +12,7 @@ const years = [
   { id: 2020 },
   { id: 2019 },
 ];
-const from = new Date();
+const from = new Date("2024-01-04");
 const to = new Date("2024-01-18");
 const current = new Date();
 
@@ -174,36 +174,36 @@ function VotingApp() {
           className="inline-block ml-5 drop-shadow-md mt-7 md:mt-[-5px] md:p-[10px] w-[100px] md:w-[150px]"
           src="../images/nl22logo.png"
         />
+        <div className="absolute ml-28 -mt-10 md:ml-40 md:-mt-16 text-lg font-bold">
+          <Listbox value={selectedYear} onChange={setSelectedYear}>
+            <Listbox.Button
+              className="w-20 text-center"
+              style={{ textShadow: "1px 1px 2px black" }}
+            >
+              {selectedYear.id}
+            </Listbox.Button>
+            <Listbox.Options>
+              {years.map((year) => (
+                <Listbox.Option key={year.id} value={year} as={Fragment}>
+                  {({ active, selected }) => (
+                    <li
+                      className={`w-20 text-center ${
+                        active
+                          ? "bg-blue-500 text-white"
+                          : "bg-white text-black"
+                      }`}
+                    >
+                      {selected}
+                      {year.id}
+                    </li>
+                  )}
+                </Listbox.Option>
+              ))}
+            </Listbox.Options>
+          </Listbox>
+        </div>
         {isLoggedIn && user ? (
           <>
-            <div className="absolute ml-28 -mt-10 md:ml-40 md:-mt-16 text-lg font-bold">
-              <Listbox value={selectedYear} onChange={setSelectedYear}>
-                <Listbox.Button
-                  className="w-20 text-center"
-                  style={{ textShadow: "1px 1px 2px black" }}
-                >
-                  {selectedYear.id}
-                </Listbox.Button>
-                <Listbox.Options>
-                  {years.map((year) => (
-                    <Listbox.Option key={year.id} value={year} as={Fragment}>
-                      {({ active, selected }) => (
-                        <li
-                          className={`w-20 text-center ${
-                            active
-                              ? "bg-blue-500 text-white"
-                              : "bg-white text-black"
-                          }`}
-                        >
-                          {selected}
-                          {year.id}
-                        </li>
-                      )}
-                    </Listbox.Option>
-                  ))}
-                </Listbox.Options>
-              </Listbox>
-            </div>
             <div
               className="inline-block float-right md:mr-10 mr-5 mt-7 md:mt-2.5"
               id="name"
@@ -313,7 +313,8 @@ function VotingApp() {
               </div>
             </>
           )
-        ) : isEnabled ? (
+        ) : 
+        selectedYear.id === parseInt(new Date().getFullYear()) ? (
           <>
             <div
               className="text-center relative p-5 lg:w-[750px] lg:mx-auto md:p-10 lg:p-15"
