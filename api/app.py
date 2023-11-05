@@ -54,8 +54,11 @@ def check_member(id):
     return response.status_code
 
 
-def get_matches(href, targetYear):
-    url = f"https://www.cagematch.net/2k16/printversion.php{href}&page=22&type=byYear&eventType=TV-Show%7CPay+Per+View%7CPremium+Live+Event%7COnline+Stream"
+def get_matches(href, targetYear, type):
+    if type == 'total':
+        url = f"https://www.cagematch.net/2k16/printversion.php{href}&page=22"
+    elif type == 'house':
+        url = f"https://www.cagematch.net/2k16/printversion.php{href}&page=22&type=byYear&eventType=House+Show"
     soup = send_get_request(url)
     years = soup.select(
         'tr.TRow1 > td:nth-of-type(2), tr.TRow2 > td:nth-of-type(2)')
@@ -77,25 +80,27 @@ def get_wrestlers(soup, year):
             'a', href=True, text=True)['href']
         total = get_matches(url, year, 'total')
         if total >= 10:
-            soup2 = send_get_request(
-                f"https://www.cagematch.net/2k16/printversion.php{url}")
-            infoRows = soup2.select('div.InformationBoxRow')
-            gimmicks = []
-            for infoRow in infoRows:
-                if infoRow.select('div.InformationBoxTitle')[0].text == 'Alter egos:':
-                    for gimmick in infoRow.select('div.InformationBoxContents > a'):
-                        gimmicks.append(gimmick.text.strip())
-                    break
+            house = get_matches(url, year, 'house')
+            if total - house >= 10:
+                soup2 = send_get_request(
+                    f"https://www.cagematch.net/2k16/printversion.php{url}")
+                infoRows = soup2.select('div.InformationBoxRow')
+                gimmicks = []
+                for infoRow in infoRows:
+                    if infoRow.select('div.InformationBoxTitle')[0].text == 'Alter egos:':
+                        for gimmick in infoRow.select('div.InformationBoxContents > a'):
+                            gimmicks.append(gimmick.text.strip())
+                        break
 
-            collection = db[f"{year}"]
-            wrestlerData = {
-                "_id": int(re.findall(r'\?id=2&nr=(.+?)(?=\&|$)', url)[0]),
-                "name": wrestler.text.strip(),
-                "gimmicks": gimmicks
-            }
-            collection.update_one({"_id": wrestlerData['_id']}, {
-                                    '$set': wrestlerData}, upsert=True)
-            print(wrestlerData)
+                collection = db[f"{year}"]
+                wrestlerData = {
+                    "_id": int(re.findall(r'\?id=2&nr=(.+?)(?=\&|$)', url)[0]),
+                    "name": wrestler.text.strip(),
+                    "gimmicks": gimmicks
+                }
+                collection.update_one({"_id": wrestlerData['_id']}, {
+                                      '$set': wrestlerData}, upsert=True)
+                print(wrestlerData)
 
 
 @app.route("/api/nL22/scrape/<year>")
