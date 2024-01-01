@@ -12,7 +12,7 @@ const years = [
   { id: 2020 },
   { id: 2019 },
 ];
-const from = new Date("2024-01-04");
+const from = new Date("2024-01-05");
 const to = new Date("2024-01-18");
 const current = new Date();
 
@@ -94,7 +94,7 @@ function VotingApp() {
     if (
       current <= to &&
       current >= from &&
-      selectedYear.id >= parseInt(new Date().getFullYear())
+      selectedYear.id <= parseInt(new Date().getFullYear())
     ) {
       setIsEnabled(true);
     } else {
@@ -314,7 +314,7 @@ function VotingApp() {
             </>
           )
         ) : 
-        selectedYear.id === parseInt(new Date().getFullYear()) ? (
+        (selectedYear.id + 1) === parseInt(new Date().getFullYear()) ? (
           <>
             <div
               className="text-center relative p-5 lg:w-[750px] lg:mx-auto md:p-10 lg:p-15"
